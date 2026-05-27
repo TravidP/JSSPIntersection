@@ -1,0 +1,147 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 760" role="img" aria-labelledby="figTitle figDesc">
+  <title id="figTitle">Non-monetary intersection incentives for selfish routing</title>
+  <desc id="figDesc">A concept map showing the thesis logic: selfish route choice creates inefficient Wardrop equilibria; autonomous intersections create controllable delay levers; SPBS and timestamp offsets induce path-dependent node costs; a bilevel planner designs incentives anticipating equilibrium response; the resulting platform opens several PhD research directions.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef4ff"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f68c2"/>
+      <stop offset="100%" stop-color="#1aa7a1"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffb454"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#1f2937" flood-opacity="0.15"/>
+    </filter>
+    <marker id="arrowBlue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1,2 L10,6 L1,10 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowGray" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1,2 L10,6 L1,10 Z" fill="#64748b"/>
+    </marker>
+    <style>
+      .title{font:700 28px ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;fill:#0f172a}
+      .subtitle{font:500 15px ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;fill:#475569}
+      .boxTitle{font:700 16px ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;fill:#0f172a}
+      .boxText{font:500 12.5px ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;fill:#334155}
+      .mini{font:700 11px ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;fill:#fff;letter-spacing:.4px}
+      .formula{font:600 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:#164e63}
+      .label{font:700 13px ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;fill:#1e293b}
+      .small{font:500 11.5px ui-sans-serif,system-ui,-apple-system,Segoe UI,Arial;fill:#475569}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1180" height="760" rx="26" fill="url(#bg)"/>
+  <text class="title" x="50" y="54">From selfish routing to PhD research directions</text>
+  <text class="subtitle" x="50" y="82">Thesis logic: use autonomous intersections as non-monetary mechanism-design levers.</text>
+
+  <!-- Top pipeline -->
+  <g filter="url(#shadow)">
+    <rect x="50" y="125" width="190" height="122" rx="18" fill="#ffffff" stroke="#cbd5e1"/>
+    <circle cx="80" cy="157" r="16" fill="url(#gold)"/>
+    <text class="mini" x="74" y="161">1</text>
+    <text class="boxTitle" x="106" y="151">Selfish routing</text>
+    <text class="boxText" x="75" y="181">Drivers minimize their</text>
+    <text class="boxText" x="75" y="199">own route time, not</text>
+    <text class="boxText" x="75" y="217">network-wide delay.</text>
+  </g>
+
+  <path d="M245 186 C268 186 276 186 298 186" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="305" y="125" width="205" height="122" rx="18" fill="#ffffff" stroke="#cbd5e1"/>
+    <circle cx="338" cy="157" r="16" fill="url(#gold)"/>
+    <text class="mini" x="332" y="161">2</text>
+    <text class="boxTitle" x="365" y="151">Wardrop equilibrium</text>
+    <text class="boxText" x="330" y="181">No used path is more</text>
+    <text class="boxText" x="330" y="199">expensive than an</text>
+    <text class="boxText" x="330" y="217">unused alternative.</text>
+  </g>
+
+  <path d="M515 186 C540 186 548 186 574 186" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="580" y="125" width="210" height="122" rx="18" fill="#ffffff" stroke="#cbd5e1"/>
+    <circle cx="613" cy="157" r="16" fill="url(#gold)"/>
+    <text class="mini" x="607" y="161">3</text>
+    <text class="boxTitle" x="640" y="151">Inefficiency gap</text>
+    <text class="boxText" x="605" y="181">UE can overload</text>
+    <text class="boxText" x="605" y="199">attractive corridors:</text>
+    <text class="formula" x="605" y="220">PoA = C(UE) / C(SO)</text>
+  </g>
+
+  <path d="M795 186 C816 186 828 186 850 186" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="855" y="125" width="250" height="122" rx="18" fill="#ffffff" stroke="#cbd5e1"/>
+    <circle cx="889" cy="157" r="16" fill="url(#blue)"/>
+    <text class="mini" x="883" y="161">4</text>
+    <text class="boxTitle" x="916" y="151">AIM/V2I opportunity</text>
+    <text class="boxText" x="880" y="181">RSUs schedule crossing order.</text>
+    <text class="boxText" x="880" y="199">Small delay changes become</text>
+    <text class="boxText" x="880" y="217">route-choice incentives.</text>
+  </g>
+
+  <!-- Branches -->
+  <path d="M955 250 C955 285 370 280 370 318" stroke="#64748b" stroke-width="2.5" fill="none" marker-end="url(#arrowGray)"/>
+  <path d="M955 250 C955 285 770 280 770 318" stroke="#64748b" stroke-width="2.5" fill="none" marker-end="url(#arrowGray)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="120" y="325" width="430" height="166" rx="22" fill="#fff7ed" stroke="#fed7aa"/>
+    <rect x="145" y="350" width="100" height="25" rx="12" fill="url(#gold)"/>
+    <text class="mini" x="158" y="367">Mechanism 1</text>
+    <text class="boxTitle" x="145" y="404">Strategic Priority-Based Scheduling (SPBS)</text>
+    <text class="boxText" x="145" y="430">Assign different service priority to route classes at an intersection.</text>
+    <text class="formula" x="145" y="456">upper node delay = w - p; lower node delay = w + p</text>
+    <text class="boxText" x="145" y="480">Effect: discourages overuse of the congestible route in Pigou-type networks.</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="620" y="325" width="430" height="166" rx="22" fill="#eef2ff" stroke="#c7d2fe"/>
+    <rect x="645" y="350" width="100" height="25" rx="12" fill="url(#purple)"/>
+    <text class="mini" x="658" y="367">Mechanism 2</text>
+    <text class="boxTitle" x="645" y="404">Timestamp-based node incentives</text>
+    <text class="boxText" x="645" y="430">Advance or delay effective request times before RSU scheduling.</text>
+    <text class="formula" x="645" y="456">c_v^p(f_v,u_v^p) = c_v(f_v) + u_v^p</text>
+    <text class="boxText" x="645" y="480">Effect: scalable path-dependent costs with a potential-game formulation.</text>
+  </g>
+
+  <!-- Convergence -->
+  <path d="M335 493 C335 535 510 536 570 556" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+  <path d="M835 493 C835 535 670 536 610 556" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="260" y="565" width="410" height="112" rx="20" fill="#ecfeff" stroke="#a5f3fc"/>
+    <text class="boxTitle" x="287" y="601">Equilibrium-aware optimization</text>
+    <text class="boxText" x="287" y="628">Planner chooses incentives; drivers respond selfishly.</text>
+    <text class="formula" x="287" y="653">min_u C(f(u),u),  f(u) in argmin Phi(f,u)</text>
+  </g>
+
+  <path d="M675 620 C715 620 727 620 767 620" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="775" y="565" width="290" height="112" rx="20" fill="#f0fdf4" stroke="#bbf7d0"/>
+    <text class="boxTitle" x="803" y="601">Reported outcome</text>
+    <text class="boxText" x="803" y="628">Sioux Falls timestamp incentives:</text>
+    <text class="formula" x="803" y="653">68.2% UE optimality-gap closure</text>
+  </g>
+
+  <!-- Research frontier bubbles -->
+  <g opacity="0.98">
+    <text class="label" x="65" y="715">PhD frontier:</text>
+    <circle cx="185" cy="711" r="7" fill="#2563eb"/><text class="small" x="198" y="715">dynamic incentives</text>
+    <circle cx="338" cy="711" r="7" fill="#7c3aed"/><text class="small" x="351" y="715">mixed autonomy</text>
+    <circle cx="487" cy="711" r="7" fill="#16a34a"/><text class="small" x="500" y="715">fairness + privacy</text>
+    <circle cx="640" cy="711" r="7" fill="#f97316"/><text class="small" x="653" y="715">spillback models</text>
+    <circle cx="802" cy="711" r="7" fill="#0f766e"/><text class="small" x="815" y="715">scalable bilevel algorithms</text>
+  </g>
+</svg>
