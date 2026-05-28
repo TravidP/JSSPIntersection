@@ -4,6 +4,7 @@ This repository organizes a research direction on **Job-Shop Scheduling Problem 
 
 The current plan builds on the DATE 2023 paper **"Reinforcement-Learning-Based Job-Shop Scheduling for Intelligent Intersection Management"** and extends the idea toward heterogeneous vehicles, weighted-priority delay, trajectory data, and receding-horizon predictive scheduling.
 
+![JSSP RL Previous](/Pic/RLJSSPPrePaper.png)
 ![JSSP traffic sketch](Pic/JSSPTraffic.png)
 
 ## Research Direction

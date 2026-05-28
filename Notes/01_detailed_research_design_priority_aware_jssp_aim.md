@@ -10,6 +10,7 @@ The autonomous intersection management problem can be modeled as a **resource al
 
 The intersection is divided into several **conflict zones**. Each conflict zone is treated as a limited resource, similar to a machine in a Job-Shop Scheduling Problem (JSSP). Each vehicle is treated as a job. A vehicle's route through the intersection is treated as a sequence of operations, where each operation means that the vehicle occupies one conflict zone for a certain time.
 
+![JSSP traffic sketch](../Pic/RLJSSPPrePaper.png)
 The existing JSSP-RL paper already provides the foundation:
 
 - Use a graph-based conflict-zone model for intersection management.

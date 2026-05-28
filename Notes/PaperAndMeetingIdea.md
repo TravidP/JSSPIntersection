@@ -17,6 +17,8 @@ Huang et al. propose a centralized intersection manager for connected and autono
 
 In this formulation, an intersection is not controlled by fixed signal phases. Instead, the manager decides the passing order of vehicles through shared conflict zones. If each conflict zone is occupied by at most one vehicle at a time, and if the schedule avoids deadlock, then the crossing can be collision-free and efficient.
 
+![JSSP traffic sketch](../Pic/RLJSSPPrePaper.png)
+
 ## 2. Mapping AIM to JSSP
 
 The paper's most important modeling step is the mapping between autonomous intersection management and JSSP:
