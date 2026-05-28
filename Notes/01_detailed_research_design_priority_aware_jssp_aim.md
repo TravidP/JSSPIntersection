@@ -4,6 +4,8 @@
 
 **Priority-Aware Data-Driven Job-Shop Scheduling for Autonomous Intersection Management**
 
+![Priority-aware data-driven JSSP for AIM concept map](../Pic/PriorityAwareJSSPAIMMindMap.png)
+
 ## 1. Core idea
 
 The autonomous intersection management problem can be modeled as a **resource allocation and scheduling problem**.

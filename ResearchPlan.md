@@ -10,6 +10,8 @@ The research question is:
 
 > How can a single autonomous intersection be modeled as a constrained JSSP/resource allocation problem, and how can reinforcement learning or data-driven scheduling improve weighted traffic delay while preserving collision-free and deadlock-free operation?
 
+![Priority-aware data-driven JSSP for AIM concept map](Pic/PriorityAwareJSSPAIMMindMap.png)
+
 ## 2. Problem Formulation
 
 ### 2.1 Intersection as Resources

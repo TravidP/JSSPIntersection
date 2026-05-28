@@ -10,6 +10,8 @@
 
 Divide the intersection into conflict zones. Treat each conflict zone as a limited resource. Treat each vehicle as a job. Treat the vehicle trajectory as a sequence of conflict-zone operations. Then solve the vehicle passing-order problem as a constrained Job-Shop Scheduling Problem.
 
+![Priority-aware data-driven JSSP for AIM concept map](../Pic/PriorityAwareJSSPAIMMindMap.png)
+
 ### Extension beyond the base paper
 
 The base paper models autonomous intersection management as constrained JSSP and trains a PPO-based reinforcement learning scheduler. My extension is to consider **heterogeneous vehicles and vehicle priority**.

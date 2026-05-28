@@ -4,6 +4,8 @@
 
 This note organizes the research idea discussed with the supervisor. The core direction is to use Job-Shop Scheduling Problem (JSSP) or related resource allocation methods to model autonomous intersection management. The plan is based mainly on the DATE 2023 paper "Reinforcement-Learning-Based Job-Shop Scheduling for Intelligent Intersection Management" and extends it toward heterogeneous vehicles, weighted priority, trajectory data, and receding-horizon prediction.
 
+![Priority-aware data-driven JSSP for AIM concept map](../Pic/PriorityAwareJSSPAIMMindMap.png)
+
 ## 1. Source Paper: Main Idea
 
 Huang et al. propose a centralized intersection manager for connected and autonomous vehicles. Their key idea is:

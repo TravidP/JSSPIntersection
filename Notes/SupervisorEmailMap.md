@@ -30,6 +30,8 @@ Best regards,
 
 ## One-Page Agreement Map
 
+![Priority-aware data-driven JSSP for AIM concept map](../Pic/PriorityAwareJSSPAIMMindMap.png)
+
 ### Core Motivation
 
 Autonomous intersections can be treated as scheduling systems rather than fixed signal systems. If the intersection manager knows the incoming vehicles and their planned trajectories, it can allocate conflict zones safely and efficiently.
