@@ -1,0 +1,8 @@
+\section{Conclusion and Future Work}
+
+This paper presented a formulation draft for priority-aware constrained job-shop scheduling in autonomous intersection management. The proposed model maps vehicles to jobs, conflict zones to resources, and zone traversal events to operations, while adding traffic-specific constraints for release times, trajectory order, same-lane FIFO behavior, blocking, and deadlock avoidance. The main extension over homogeneous JSSP-style AIM is a priority-aware weighted-delay objective for heterogeneous vehicles, with physical modeling of trucks through processing times and headways, person-delay motivation for buses, and optional hard priority for emergency vehicles.
+
+The proposed framework is intended for online receding-horizon execution. A future implementation should first build a reliable simulator, feasibility checker, and interpretable baselines. Reinforcement learning should be added only after those components are stable, and any learned scheduler should remain constrained by action masks and verification logic rather than being trusted as an unconstrained safety mechanism.
+
+Future work includes implementing the scheduling environment, calibrating priority weights, validating against small-instance optimization, testing robustness to prediction error, and extending the single-intersection formulation to coordinated intersections. Edge deployment and federated learning may become relevant after the single-intersection priority-aware scheduler is validated.
+

@@ -1,0 +1,1467 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DCL-AIM 2019 Page-by-Page Bilingual Reading</title>
+  <style>
+    :root {
+      --bg: #f4f6f1;
+      --paper: #fffdf8;
+      --ink: #202832;
+      --muted: #657181;
+      --line: #d9ded3;
+      --green: #34735a;
+      --blue: #2e658e;
+      --amber: #a86c22;
+      --red: #a04444;
+      --violet: #66568f;
+      --soft-green: #e7f2ec;
+      --soft-blue: #e8f0f6;
+      --soft-amber: #fff2df;
+      --soft-red: #f8e7e7;
+      --soft-violet: #f0edf7;
+      --shadow: 0 10px 28px rgba(28, 38, 49, 0.08);
+      --radius: 8px;
+      font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.62;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(235px, 300px) minmax(0, 1fr);
+      gap: 24px;
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 18px;
+      height: calc(100vh - 36px);
+      overflow: auto;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, 0.96);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav-title {
+      margin: 18px 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 7px 9px;
+      border-radius: 6px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .nav-list a:hover {
+      background: var(--soft-blue);
+      text-decoration: none;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero,
+    .page-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 26px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 1080px;
+      font-size: 34px;
+      line-height: 1.2;
+      letter-spacing: 0;
+      overflow-wrap: break-word;
+    }
+
+    .hero p {
+      max-width: 1060px;
+      margin: 14px 0 0;
+      color: #394552;
+      font-size: 17px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .meta {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf5;
+    }
+
+    .meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .meta strong {
+      display: block;
+      margin-top: 3px;
+    }
+
+    .reading-rules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .rule {
+      padding: 13px 14px;
+      border-left: 4px solid var(--green);
+      background: var(--soft-green);
+      border-radius: 6px;
+    }
+
+    .rule strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .page-card {
+      margin-top: 18px;
+      padding: 22px;
+      scroll-margin-top: 16px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .page-head h2 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .tag {
+      flex: 0 0 auto;
+      padding: 5px 10px;
+      border: 1px solid #cbd8d1;
+      border-radius: 999px;
+      color: var(--green);
+      background: #f2faf5;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .overview {
+      margin: 14px 0 0;
+      padding: 14px 16px;
+      border: 1px solid #d6e4da;
+      border-radius: var(--radius);
+      background: var(--soft-green);
+    }
+
+    .section-title {
+      margin: 18px 0 10px;
+      color: #223244;
+      font-size: 16px;
+      font-weight: 850;
+    }
+
+    .figure-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .figure-block {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf5;
+      overflow: hidden;
+    }
+
+    .figure-block.wide {
+      grid-column: 1 / -1;
+    }
+
+    .figure-block img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: white;
+    }
+
+    .figure-caption {
+      margin: 0;
+      padding: 9px 11px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .paras {
+      display: grid;
+      gap: 10px;
+    }
+
+    .para {
+      display: grid;
+      grid-template-columns: 86px repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fffefa;
+      overflow: hidden;
+    }
+
+    .pid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100%;
+      padding: 12px 8px;
+      color: var(--green);
+      background: #eef6f1;
+      font-weight: 850;
+      text-align: center;
+    }
+
+    .col {
+      padding: 12px 12px 13px;
+      border-left: 1px solid var(--line);
+      min-width: 0;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .col p {
+      margin: 0;
+    }
+
+    .note-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .callout {
+      padding: 13px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: #fbfaf5;
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .callout.hard {
+      border-color: #efd3ae;
+      background: var(--soft-amber);
+    }
+
+    .callout.research {
+      border-color: #c9d7e6;
+      background: var(--soft-blue);
+    }
+
+    .callout.warning {
+      border-color: #e4c3c3;
+      background: var(--soft-red);
+    }
+
+    .summary-box,
+    .terms {
+      margin-top: 12px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf5;
+    }
+
+    .summary-box strong,
+    .terms strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #273647;
+    }
+
+    .terms span {
+      display: inline-block;
+      margin: 4px 6px 0 0;
+      padding: 4px 8px;
+      border: 1px solid #d0d8df;
+      border-radius: 999px;
+      background: #f4f7fa;
+      color: #314253;
+      font-size: 13px;
+    }
+
+    .citation-map {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .citation-map .callout {
+      min-height: 150px;
+    }
+
+    code {
+      padding: 1px 4px;
+      border-radius: 4px;
+      background: #eef1f4;
+      font-family: Consolas, "Cascadia Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 1fr;
+        padding: 14px;
+      }
+
+      .sidebar {
+        position: relative;
+        top: auto;
+        height: auto;
+      }
+
+      .nav-list.pages {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .meta-grid,
+      .reading-rules,
+      .figure-grid,
+      .note-grid,
+      .citation-map {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      h1 {
+        font-size: 25px;
+      }
+
+      .page-card,
+      .hero {
+        padding: 17px;
+      }
+
+      .nav-list.pages {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .page-head {
+        display: block;
+      }
+
+      .tag {
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      .para {
+        grid-template-columns: 1fr;
+      }
+
+      .pid,
+      .col {
+        border-left: 0;
+      }
+
+      .col {
+        border-top: 1px solid var(--line);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Page navigation">
+      <h2 class="brand">DCL-AIM 逐页双语精读</h2>
+      <p class="subtitle">Decentralized Coordination Learning of AIM for CAVs, 2019</p>
+
+      <div class="nav-title">重点跳转</div>
+      <ol class="nav-list">
+        <li><a href="#mamdp">MAMDP formulation</a></li>
+        <li><a href="#desired-cells">desired / occupying cells</a></li>
+        <li><a href="#state-decomposition">state decomposition</a></li>
+        <li><a href="#dcl-algorithm">DCL-AIM algorithm</a></li>
+        <li><a href="#q-learning">Q-learning update</a></li>
+        <li><a href="#simulation-setup">simulation setup</a></li>
+        <li><a href="#effectiveness">effectiveness comparison</a></li>
+        <li><a href="#references-map">citation map</a></li>
+      </ol>
+
+      <div class="nav-title">页码导航</div>
+      <ol class="nav-list pages">
+        <li><a href="#page-01">Page 1</a></li>
+        <li><a href="#page-02">Page 2</a></li>
+        <li><a href="#page-03">Page 3</a></li>
+        <li><a href="#page-04">Page 4</a></li>
+        <li><a href="#page-05">Page 5</a></li>
+        <li><a href="#page-06">Page 6</a></li>
+        <li><a href="#page-07">Page 7</a></li>
+        <li><a href="#page-08">Page 8</a></li>
+        <li><a href="#page-09">Page 9</a></li>
+        <li><a href="#page-10">Page 10</a></li>
+        <li><a href="#page-11">Page 11</a></li>
+        <li><a href="#page-12">Page 12</a></li>
+        <li><a href="#page-13">Page 13</a></li>
+        <li><a href="#page-14">Page 14</a></li>
+        <li><a href="#page-15">Page 15</a></li>
+        <li><a href="#page-16">Page 16</a></li>
+        <li><a href="#page-17">Page 17</a></li>
+        <li><a href="#page-18">Page 18</a></li>
+        <li><a href="#page-19">Page 19</a></li>
+        <li><a href="#page-20">Page 20</a></li>
+        <li><a href="#page-21">Page 21</a></li>
+        <li><a href="#page-22">Page 22</a></li>
+        <li><a href="#page-23">Page 23</a></li>
+        <li><a href="#page-24">Page 24</a></li>
+        <li><a href="#page-25">Page 25</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <section class="hero" id="top">
+        <h1>DCL-AIM 2019: Decentralized Coordination Learning of Autonomous Intersection Management for CAVs</h1>
+        <p>这是一份逐页、逐段的双语阅读笔记。英文栏使用 paraphrase 和 reading note，中文栏解释论文逻辑，summary 栏把每段压缩成一句中文要点；References 页不逐条翻译，而整理成对 AIM、JSSP scheduling、MARL 和 evaluation 有用的 citation map。</p>
+        <div class="meta-grid">
+          <div class="meta"><span>Paper type</span><strong>RL / MARL AIM</strong></div>
+          <div class="meta"><span>Core model</span><strong>MAMDP + DCL</strong></div>
+          <div class="meta"><span>Control style</span><strong>Decentralized CAV agents</strong></div>
+          <div class="meta"><span>Reading target</span><strong>Priority-aware JSSP/AIM comparison</strong></div>
+        </div>
+        <div class="reading-rules">
+          <div class="rule"><strong>How to read this HTML</strong>先看每页 overview，再读 P01/P02；遇到 MAMDP、desired cells、joint Q-table 时看批注。</div>
+          <div class="rule"><strong>Copyright-safe note</strong>这里不复制论文全文；英文部分是理解性 paraphrase，图表为本地论文关键图表截图，服务个人研究阅读。</div>
+        </div>
+      </section>
+
+      <section class="page-card" id="page-01">
+        <div class="page-head">
+          <h2>Page 1: Title, Abstract, and Keywords</h2>
+          <span class="tag">Motivation</span>
+        </div>
+        <div class="overview">本页建立整篇论文的核心问题：CAV intersection management 可以不用传统信号灯，但如果只靠预设规则，例如 FCFS，就很难在复杂随机交通中达到好效果。作者提出用多智能体强化学习处理车辆在交叉口内的连续决策。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01<br>title</div>
+            <div class="col"><span class="label">English reading note</span><p>The title signals a learning-based AIM method where each CAV makes decisions as part of a decentralized coordination process.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>题目里的 DCL-AIM 说明它不是集中式优化器，而是让车辆智能体在需要冲突协调时学习联合动作。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>这篇文章把 AIM 问题转成“去中心化多车协调学习”问题。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02<br>abstract</div>
+            <div class="col"><span class="label">English reading note</span><p>The abstract frames sequential vehicle movement through an intersection as a multi-agent Markov decision problem and introduces DCL-AIM to reduce delay while preserving collision-free behavior.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>作者把每辆车视为 agent，把每一步是否加速、减速或保持速度视为 action，把延误的负值作为 reward。学习目标是让所有车协同通过路口。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>摘要的主线是：MAMDP 建模 + DCL 分解 + 延误最小化。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03<br>results</div>
+            <div class="col"><span class="label">English reading note</span><p>The paper claims better performance than FCFS-AIM, Longest-Queue-First, and signal control in simulation.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这些 baseline 很重要：FCFS 是 AIM 经典启发式，LQF 偏向排队更长车道，Signal 是传统 Webster 信号控制。DCL-AIM 的定位是学习到比这些规则更好的策略。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>作者要证明学习策略在平均延误和拥堵处理上优于规则策略。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>和 priority-aware JSSP/AIM 的关系</strong>DCL-AIM 是 RL-based AIM，但没有显式 heterogeneous priority。你的研究可以把它作为“学习式 AIM 有效，但未建模优先级权重和 JSSP 资源约束”的相关工作。</div>
+          <div class="callout hard"><strong>难点批注</strong>这里的 “decentralized” 不等于没有协调。它的关键是：只有当车辆 desired cells 发生冲突时才进入联合动作学习。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第一页给出论文问题、方法和实验对比对象：用 DCL-AIM 学习 CAV 在交叉口中的安全连续动作，目标是减少延误。</div>
+        <div class="terms"><strong>Key terms</strong><span>CAV</span><span>AIM</span><span>DCL-AIM</span><span>MAMDP</span><span>FCFS-AIM</span><span>LQF</span></div>
+      </section>
+
+      <section class="page-card" id="page-02">
+        <div class="page-head">
+          <h2>Page 2: Introduction, CAVs, and FCFS-AIM Limits</h2>
+          <span class="tag">Background</span>
+        </div>
+        <div class="overview">本页介绍 CAV 与 AIM 的背景，并指出 FCFS-AIM 虽然能实现无信号协调，但预定义优先规则可能不是全局最优。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The opening motivates CAVs through sensing, communication, and automated control, then connects those capabilities to safer and more efficient intersection management.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>CAV 的价值在于车辆能感知、通信和自动控制，所以路口不一定只能靠红绿灯固定释放车流。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>CAV 提供了无信号 AIM 的技术前提。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The paper reviews reservation-based AIM, especially the FCFS style where vehicles request crossing slots and the manager checks conflicts.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>FCFS-AIM 的直觉是“谁先到谁先过”。它简单、安全、容易实现，但没有主动搜索全局更优的通行顺序。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>FCFS 是 AIM 的基础规则，但不是最优调度。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The authors argue that learned policies may exploit spatiotemporal capacity better than a fixed priority rule.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这句话对应你的 JSSP 思路：路口资源是时空资源，好的策略应利用非冲突轨迹的并行通行，而不是只按到达顺序排队。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>论文开始从“规则放行”转向“学习资源利用策略”。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>FCFS 可作为你的 baseline；DCL-AIM 可作为 RL baseline；priority-aware JSSP 则显式加入车辆权重和资源约束。</div>
+          <div class="callout hard"><strong>难点批注</strong>“better use of space-time resources” 可以理解为：不冲突的轨迹可以同时占用不同 conflict zones，这类似 job-shop 中不同机器可并行加工。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第二页说明 CAV 让 AIM 可行，但 FCFS 只是一种固定规则，不能保证在随机交通中充分利用路口时空资源。</div>
+        <div class="terms"><strong>Key terms</strong><span>reservation-based AIM</span><span>FCFS</span><span>space-time resources</span><span>conflict-free crossing</span></div>
+      </section>
+
+      <section class="page-card" id="page-03">
+        <div class="page-head">
+          <h2>Page 3: Contributions and AIM Related Work</h2>
+          <span class="tag">Positioning</span>
+        </div>
+        <div class="overview">本页完成 introduction 的贡献声明，并进入 related work：早期 AIM、优化式 AIM、slot/reservation 方法，以及为什么作者转向学习方法。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The contribution paragraph says DCL-AIM explicitly detects when coordination is needed and learns actions only at the relevant interaction scale.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>贡献不只是“用了 RL”，而是把 multi-agent state 分成独立部分和需要协调的部分，从而避免所有车辆一直做全局联合动作。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>主要贡献是稀疏协调：有冲突才联合学习。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The AIM literature discussion revisits reservation protocols and centralized management approaches for CAV intersections.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这些工作为“车辆申请、系统检查冲突、安排通行”的 AIM 框架奠基。DCL-AIM 没有否定 reservation 思想，而是把动作选择交给学习策略。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Related work 先承接 AIM 的 reservation 基础。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The optimization-based studies are described as powerful but difficult to scale or execute in real time when many vehicles interact.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>优化式 AIM 通常可以建更清楚的约束，但车辆数量、连续时间、车辆动力学和冲突组合会让求解压力变大。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>优化方法表达力强，但可扩展性和实时性是压力点。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>写文献综述可用</strong>可把 DCL-AIM 放在 “learning-based AIM” 下，与 centralized optimization 和 JSSP-based scheduling 并列比较。</div>
+          <div class="callout hard"><strong>难点批注</strong>这篇论文的“scale”不是多路口网络规模，而是一个孤立路口内车辆 agent 数量变化导致的状态动作组合爆炸。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第三页明确本文贡献：在 AIM 中用分解式多智能体学习缓解集中优化和全局联合动作的计算压力。</div>
+        <div class="terms"><strong>Key terms</strong><span>coordination learning</span><span>reservation protocol</span><span>centralized optimization</span><span>real-time control</span></div>
+      </section>
+
+      <section class="page-card" id="page-04">
+        <div class="page-head">
+          <h2>Page 4: RL, MARL, and Decentralized Coordination Learning</h2>
+          <span class="tag">Theory Context</span>
+        </div>
+        <div class="overview">本页是理论铺垫：单智能体 RL 不够，多智能体 RL 又有维度灾难和非平稳性；DCL 的吸引力在于只在局部依赖出现时协调。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The RL review highlights learning from interaction with the environment, which is attractive when handcrafted traffic-control rules are too rigid.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这里强调 RL 的核心优势：不用把每个路况规则写死，而是通过 reward 让策略从模拟环境中学。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>RL 被用来替代固定规则设计。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The MARL discussion notes two opposing difficulties: centralized learning faces huge joint spaces, while decentralized learners see changing behavior from other agents.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>集中式 MARL 要枚举所有车的联合状态和动作，状态动作空间指数增长；去中心化时，每个 agent 看到其他 agent 正在学习，环境分布会变。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>MARL 的两难是维度灾难和环境非平稳。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>DCL is introduced as a middle path: exploit context-specific independence and coordinate only with agents whose actions truly interact.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>DCL 的思想很像“局部冲突图”：不是所有车辆都互相耦合，只有轨迹空间上会冲突的车辆需要组成联合决策子问题。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL 用稀疏交互结构降低 MARL 难度。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：environment nonstationarity</strong>对单个车辆来说，其他车辆的策略也在学习更新，所以同一个动作在同一个局部状态下产生的结果分布会变化，这破坏了标准 MDP 的稳定环境假设。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的 centralized priority-aware JSSP 走另一条路：不让车辆各自学习，而是在滚动时域内求受约束调度。可对比“分布式学习”与“集中式可解释约束优化”。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第四页解释 DCL-AIM 的理论动机：用局部协调处理 MARL 的大状态空间和非平稳环境问题。</div>
+        <div class="terms"><strong>Key terms</strong><span>MARL</span><span>curse of dimensionality</span><span>nonstationarity</span><span>context-specific independence</span><span>DCL</span></div>
+      </section>
+
+      <section class="page-card" id="page-05">
+        <div class="page-head">
+          <h2>Page 5: Problem Statement and Delay Objective</h2>
+          <span class="tag">Problem Formulation</span>
+        </div>
+        <div class="overview">本页把交通控制问题落到数学目标：车辆通过路口的总延误需要最小化。作者把 AIM 从 reservation scheduling 转为多智能体顺序决策问题。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The problem statement assumes a reservation-style CAV intersection where vehicles communicate their arrival and movement intentions.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>模型前提是 CAV 可以把自己的入口、车道、转向、速度等信息提供给控制系统或邻近车辆，因此可预测冲突。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>AIM 的信息基础是车辆意图可通信、可预测。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The delay objective compares actual crossing time with an ideal travel time and sums the differences over vehicles.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这相当于把“因为协调、等待、减速造成的额外时间”作为成本。后面的 reward 就是这个延误的负值。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>优化目标是全体车辆的总延误最小。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The paper argues that directly solving the centralized decision problem is impractical, so it moves to a multi-agent decision model.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这一步是从“全局优化问题”转成“每辆车一个 agent 的 MAMDP”。注意这不是证明优化不可用，而是为 DCL-AIM 的学习框架铺路。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>集中求解太重，因此转向 MAMDP 和多智能体学习。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>Priority-aware 延伸</strong>这里的 delay 是未加权的。你的研究可把目标改为 <code>sum w_i delay_i</code>，让救护车、公交、货车等类别进入目标函数。</div>
+          <div class="callout hard"><strong>难点批注</strong>延误最小化不是自动等于公平。平均延误降低可能牺牲少数低频类别；priority-aware 需要额外讨论 fairness 或 class-specific delay。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第五页完成问题定义：目标是最小化交叉口总延误，并把 CAV 通行转化为多智能体序贯决策。</div>
+        <div class="terms"><strong>Key terms</strong><span>delay objective</span><span>reservation</span><span>joint decision</span><span>arrival time</span><span>actual crossing time</span></div>
+      </section>
+
+      <section class="page-card" id="page-06">
+        <span id="mamdp"></span>
+        <span id="desired-cells"></span>
+        <div class="page-head">
+          <h2>Page 6: MAMDP State, Speed, and Cell Occupancy</h2>
+          <span class="tag">MAMDP</span>
+        </div>
+        <div class="overview">本页开始正式建模 MAMDP。关键是把路口离散成 cells，并把车辆当前占用格子、未来期望占用格子、速度、转向和队列状态放入 state。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The model defines each CAV as an agent whose local state includes position, speed, movement intention, and local traffic context.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>每辆车不是只知道“到没到路口”，而是知道自己在哪些 cells、速度是多少、要直行还是转弯，以及前方/队列情况。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>车辆 agent 的状态包含位置、速度、意图和局部交通信息。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>Speed is discretized by how many cells a vehicle can advance in one decision step.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这把连续运动简化为离散 cell-step 模型。后面 level 1 和 level 2 的区别，本质就是 cell 粒度不同。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>速度用每步跨越多少 cell 表示。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The state representation distinguishes cells already occupied by the vehicle from cells it desires to occupy soon if it keeps moving.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>occupying cells 表示车辆现在占用的空间；desired cells 表示车辆根据当前速度和安全停车距离，下一段时间可能需要的空间。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>安全判断依赖当前占用格和未来期望格。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：desired cells</strong>desired cells 不是简单的下一格，而是与速度和安全停车距离相关。速度越高，需要提前保留的空间越长。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>occupying/desired cells 可以映射成 conflict-zone occupation windows。你的 JSSP 模型可把它们改写为资源占用时间窗和安全 headway 约束。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第六页定义 MAMDP 的 state：用离散 cell 描述车辆当前位置和未来潜在占用空间，为冲突检测和联合动作筛选打基础。</div>
+        <div class="terms"><strong>Key terms</strong><span>state</span><span>cell occupancy</span><span>desired cells</span><span>speed discretization</span><span>MAMDP</span></div>
+      </section>
+
+      <section class="page-card" id="page-07">
+        <div class="page-head">
+          <h2>Page 7: Fig. 1, Desired Cells, and Action Choices</h2>
+          <span class="tag">Cell Model</span>
+        </div>
+        <div class="overview">本页用 Fig. 1 可视化 occupying cells、desired cells 和 overlapped cells。理解这张图，就能理解 DCL-AIM 如何把碰撞风险转成 cell overlap 问题。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/fig01_cell_occupancies.png" alt="Figure 1 cell occupancies">
+            <figcaption class="figure-caption">Fig. 1 cell occupancies: red = current occupation, green = desired cells, purple = overlap.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01<br>figure</div>
+            <div class="col"><span class="label">English reading note</span><p>The figure shows that conflict is represented geometrically by overlapping desired or occupied cells among vehicles.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>图中紫色区域就是潜在冲突。如果两辆车都按原计划前进，未来安全空间发生重叠，就需要协调。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>cell overlap 是 DCL-AIM 判断是否需要协调的核心信号。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The desired-cells formula expands the occupied region along the intended trajectory according to speed and braking requirements.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>desired cells 把“车辆能不能安全停下”纳入占用预测，所以它不仅避免同一时刻碰撞，也避免下一步动作后刹不住。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>desired cells 把未来运动和安全缓冲编码到状态中。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The action set is expressed through acceleration, deceleration, or maintaining movement subject to speed limits.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>车辆动作不是选择完整路线，而是在既定路线下选择速度变化。路线/转向是状态的一部分，动作主要控制时间维度。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>动作空间是离散速度控制：加速、减速或保持。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：collision-free 保证</strong>它不是通过复杂车辆动力学证明无碰撞，而是通过 cell occupancy + desired cells 排除会造成 overlap 的 joint actions。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>如果把每个 cell 看成资源，desired cells 就像提前申请未来资源；你的 conflict zones 可以比 cell 更粗，但要保留安全间隔。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第七页说明 DCL-AIM 的安全建模：车辆当前占用和未来期望占用一旦重叠，就需要通过联合动作避免冲突。</div>
+        <div class="terms"><strong>Key terms</strong><span>occupying cells</span><span>desired cells</span><span>overlap</span><span>safe stopping distance</span><span>action set</span></div>
+      </section>
+
+      <section class="page-card" id="page-08">
+        <div class="page-head">
+          <h2>Page 8: Rewards, State Transition, and Curse of Dimensionality</h2>
+          <span class="tag">Reward</span>
+        </div>
+        <div class="overview">本页把 action choices、reward 和 MAMDP 求解困难串起来：reward 是负延误；理论上可算最优 joint Q-function，但联合状态动作空间太大。</div>
+        <div class="figure-grid">
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/table01_action_choices.png" alt="Table 1 action choices">
+            <figcaption class="figure-caption">Table 1: action choices depend on current speed state.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The table constrains available actions by speed: a stopped vehicle cannot decelerate, and a vehicle at maximum speed cannot accelerate.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>动作空间不是任意选择，而受当前速度边界限制。这样能避免不物理的加速/减速动作。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>action choices 由当前速度和速度上限/下限约束。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The reward is defined as negative delay, so maximizing cumulative reward corresponds to reducing total delay.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>延误越大，reward 越负；学习算法为了最大化 reward，会偏向选择让车辆更快通过的动作。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>负延误 reward 把控制目标转化为强化学习目标。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The page explains that solving the optimal joint action-value function directly becomes almost impossible as the number of CAVs grows.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>每增加一辆车，joint state 和 joint action 都要乘上这辆车的可能状态/动作，因此复杂度呈指数增长。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>MAMDP 的直接求解遇到维度灾难。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：curse of dimensionality</strong>若每辆车有 100 个状态和 3 个动作，10 辆车的联合空间量级会接近 <code>(100*3)^10</code>。这就是作者必须做 DCL 分解的原因。</div>
+          <div class="callout research"><strong>Priority-aware reward</strong>这篇用无权重 delay；你的 weighted delay reward 可以写成 <code>r = -sum w_i delay_i</code>，但要配合安全和公平约束。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第八页把 DCL-AIM 的学习目标讲清楚：通过负延误 reward 学习通行策略，但全局 joint Q 太大，必须分解。</div>
+        <div class="terms"><strong>Key terms</strong><span>reward</span><span>negative delay</span><span>joint policy</span><span>Q-function</span><span>curse of dimensionality</span></div>
+      </section>
+
+      <section class="page-card" id="page-09">
+        <span id="state-decomposition"></span>
+        <div class="page-head">
+          <h2>Page 9: Independent States, Coordinated States, and Joint Actions</h2>
+          <span class="tag">DCL Core</span>
+        </div>
+        <div class="overview">本页是 DCL-AIM 的核心页：如果车辆之间没有 cell conflict，就独立行动；如果 desired/occupied cells 重叠，就进入 coordinated state 并筛掉会碰撞的 joint actions。</div>
+        <div class="figure-grid">
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/fig02_coordination_learning_procedure.png" alt="Figure 2 coordination learning procedure">
+            <figcaption class="figure-caption">Fig. 2: coordination happens only when agents interact.</figcaption>
+          </figure>
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/fig03_coordination_needed_state.png" alt="Figure 3 coordination-needed state">
+            <figcaption class="figure-caption">Fig. 3: unsafe joint action is eliminated when overlap would cause collision.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The first part says an agent can act independently when no conflicting vehicle occupies or desires overlapping cells.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这就是 context-specific independence：在某些上下文里，车辆的最佳动作不依赖其他车辆，因此不需要联合决策。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>无冲突时车辆用独立策略即可。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>When overlap exists, the vehicles form a coordination-needed subset and evaluate joint actions together.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>注意不是全路口所有车辆一起联合动作，而是只把相关冲突车辆组成局部子集 K。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>有冲突时只协调局部冲突车辆集合。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The potential joint-action set removes any combination that would cause an unsafe overlap in the next state.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>Fig. 3 里两辆车同时 keep going 会碰撞，所以该 joint action 被排除。剩下动作虽然可能慢一点，但保持安全可行。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL-AIM 通过排除冲突 joint actions 保证安全。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：independent vs coordinated</strong>independent 不是“车辆自私”，而是“当前没有交互耦合”；coordinated 也不是全局集中式，而是局部联合动作。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>这个局部冲突子集 K 很像 conflict graph 的 connected component。你的调度模型可用 conflict-zone graph 或 disjunctive constraints 表达。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第九页展示 DCL-AIM 的关键机制：根据 cell overlap 动态判断是否需要协调，并只保留无碰撞 joint actions。</div>
+        <div class="terms"><strong>Key terms</strong><span>independent state</span><span>coordinated state</span><span>joint action</span><span>conflict subset K</span><span>collision-free filtering</span></div>
+      </section>
+
+      <section class="page-card" id="page-10">
+        <span id="dcl-algorithm"></span>
+        <div class="page-head">
+          <h2>Page 10: Algorithms 1-2 and Q-table Decomposition</h2>
+          <span class="tag">Algorithm</span>
+        </div>
+        <div class="overview">本页给出 DCL-AIM 的算法框架：外层生成环境和 episode，内层让每个 agent 获取观测、判断是否协调、选择动作、获得 reward、更新 Q-table。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/algorithms01_02_dcl_aim.png" alt="Algorithms 1 and 2 DCL-AIM">
+            <figcaption class="figure-caption">Algorithms 1-2: DCL-AIM outer loop and learning process for each agent.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>Algorithm 1 describes the training loop: establish the intersection environment, generate vehicles, initialize Q-tables, and iterate episodes and time steps.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这类似一个仿真训练器：每个 episode 模拟一批车过路口，重复很多次以后得到可执行策略。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Algorithm 1 是 DCL-AIM 的整体训练流程。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>Algorithm 2 is the per-agent procedure: observe, add unseen states to the table, choose an action, receive rewards, and update values.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>每辆车都运行类似 Q-learning 的过程，但是否查 individual table 或 joint table 取决于当前是否处于 coordinated state。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Algorithm 2 是单车 agent 的学习和动作选择流程。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The Q-function is decomposed into an individual-action value table for independent states and a joint-action value table for coordinated states.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>独立状态用 <code>Q_i(s_i,a_i)</code>，协调状态用 <code>Q^I(s_K,a_K)</code>。这就是减少维度的关键。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Q-table 分成 individual Q 和 coordination joint Q。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：two Q-tables</strong>individual Q 学单车局部动作价值；joint Q 学冲突车辆集合的联合动作价值。这样避免把所有车辆永久放入同一个巨大 Q-table。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的方法若用 RL，可借鉴“只在冲突子图上决策”的思想，减少完整调度动作空间。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十页把 DCL-AIM 算法具体化：训练循环 + 单车学习流程 + individual/joint Q-table 分解。</div>
+        <div class="terms"><strong>Key terms</strong><span>Algorithm 1</span><span>Algorithm 2</span><span>Q-table</span><span>individual Q</span><span>joint Q</span><span>epsilon-greedy</span></div>
+      </section>
+
+      <section class="page-card" id="page-11">
+        <span id="q-learning"></span>
+        <div class="page-head">
+          <h2>Page 11: Observability, Rewards, Exploration, and QUpdate</h2>
+          <span class="tag">Learning Update</span>
+        </div>
+        <div class="overview">本页细化 DCL-AIM 的学习假设和 reward：车辆可通过传感器/V2V 获取必要状态；global reward、individual reward、joint reward 都是延误负值；用 epsilon-greedy 保持探索。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The paper assumes that vehicles in coordinated states can clearly perceive or communicate the joint state needed for action selection.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这是强假设：车辆能准确知道相关车辆的位置、速度、意图和 cell occupancy。现实中通信延迟和感知误差会挑战这个假设。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL-AIM 依赖较强的可观测和 V2V 信息假设。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The reward equations assign negative delay to the whole system, to independent agents, or to coordinated subsets.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>独立状态只看本车延误；协调状态看冲突集合 K 的总延误。这保持了 reward 与当前决策范围一致。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>reward 按当前决策范围分成 global、individual、joint 三种。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>Epsilon-greedy exploration is used so every state-action pair can continue to be sampled rather than immediately locking into a greedy policy.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>探索是为了收敛和避免早期错误策略。交通仿真训练中可以探索，真实部署时通常会使用训练后的策略并严格安全过滤。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>epsilon-greedy 用随机探索换取更稳定学习。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：reward 等价于 delay minimization</strong>因为 reward 是延误负值，最大化累计 reward 就是在最小化累计延误。若加入 priority weight，reward 的含义会变成最小化加权延误。</div>
+          <div class="callout warning"><strong>部署缺口</strong>论文假设 isolated intersection 和 fully observable environment。真实系统还要处理通信丢包、传感误差、混合人类驾驶车辆和安全冗余。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十一页说明 DCL-AIM 的学习细节：车辆需要可观测的联合状态，用不同范围的负延误 reward 更新 Q-values，并通过 epsilon-greedy 探索。</div>
+        <div class="terms"><strong>Key terms</strong><span>V2V</span><span>observability</span><span>individual reward</span><span>joint reward</span><span>epsilon-greedy</span><span>QUpdate</span></div>
+      </section>
+
+      <section class="page-card" id="page-12">
+        <span id="simulation-setup"></span>
+        <div class="page-head">
+          <h2>Page 12: QUpdate Cases and Simulation Setup Begins</h2>
+          <span class="tag">Implementation</span>
+        </div>
+        <div class="overview">本页承接 QUpdate，并开始实验设置。作者说明在不同状态转移情形中如何更新 individual Q 或 joint Q，然后进入 Python 仿真的 4-way-6-lane 路口。</div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The update rules depend on whether the agent remains independent, enters coordination, leaves coordination, or stays coordinated.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>DCL-AIM 的更新不是单一公式，而是根据状态类型切换。这样 individual Q 和 joint Q 可以在各自适用的上下文中学习。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>QUpdate 由状态是否协调决定。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The simulation is implemented in Python and uses a four-way, six-lane isolated intersection.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>实验不是网络级多路口，而是单个典型交叉口。这与本文“可观测、孤立路口”的假设一致。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>实验场景是一个 4-way-6-lane 孤立交叉口。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The setup includes DSRC-style communication range, lane width, speed limit, and a fixed time step.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这些参数把抽象 MAMDP 变成具体仿真：cell 大小、每步时间和速度上限会直接影响 state/action 粒度。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>仿真参数决定离散模型的时间和空间精度。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：切换状态的 QUpdate</strong>当车辆从 independent 转入 coordinated，更新目标要参考 joint Q；反过来离开冲突区时，则回到 individual Q。这是 DCL 分解的细节难点。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的 rolling-horizon scheduler 也会遇到“车辆进入/离开控制区”的状态切换，可用 release time 和 horizon boundary 表达。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十二页完成算法更新逻辑，并进入实验设置：单路口、固定时间步、离散车速和通信可观测假设。</div>
+        <div class="terms"><strong>Key terms</strong><span>QUpdate cases</span><span>simulation</span><span>DSRC range</span><span>time step</span><span>isolated intersection</span></div>
+      </section>
+
+      <section class="page-card" id="page-13">
+        <div class="page-head">
+          <h2>Page 13: Discretization Level 1 and Fig. 4</h2>
+          <span class="tag">Discretization</span>
+        </div>
+        <div class="overview">本页解释不同 discretization levels。Level 1 把路口区域划成 6 x 6 cells，每个 cell 边长约等于 3.5m，动作只需决定是否等待/减速或继续/加速。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/fig04_discretization_levels.png" alt="Figure 4 different discretization levels">
+            <figcaption class="figure-caption">Fig. 4: two discretization levels for intersection cells.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The figure contrasts coarse and fine cell discretizations of the same intersection area.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>粗粒度 cell 计算更简单，但表达车辆形状和转向轨迹较粗；细粒度 cell 更精细，但 Q-table 状态数更大。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>离散化粒度决定精度和计算复杂度的平衡。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>At level 1, each decision step can move a vehicle roughly one cell, making the action set very compact.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>Level 1 的动作近似为 0/1：0 表示减速或等待，1 表示继续或加速。这个设置利于训练，但行为比较粗。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Level 1 用较粗 cell 换取较小动作空间。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The page gives an example where turning trajectories occupy more than one cell, showing why geometry matters.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>转弯车辆不是点质量，它会占用多个 cells。对 AIM 来说，冲突不是只看中心点，而要看车辆形状和轨迹扫过区域。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>转弯轨迹会扩大空间占用，需要在冲突检测里体现。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>这对应你模型中的 conflict-zone granularity。zone 越细，约束越准确，但调度变量和冲突约束会增加。</div>
+          <div class="callout hard"><strong>难点批注</strong>离散化不是纯工程细节，它会改变 learned policy 的可行动作和安全判断边界。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十三页说明路口 cell 离散化的设计：粗粒度利于学习，细粒度更接近真实车辆占用。</div>
+        <div class="terms"><strong>Key terms</strong><span>discretization level</span><span>6 x 6 cells</span><span>cell length</span><span>trajectory geometry</span></div>
+      </section>
+
+      <section class="page-card" id="page-14">
+        <div class="page-head">
+          <h2>Page 14: Sequential Decision Process and Vehicle Generation Begins</h2>
+          <span class="tag">Dynamics</span>
+        </div>
+        <div class="overview">本页用 Fig. 5 展示车辆动作如何改变下一时刻的 occupying/desired cells，并说明 Level 2 细粒度离散化。随后进入随机车辆生成模型。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/fig05_sequential_decision_cells.png" alt="Figure 5 sequential decision and cell occupancies">
+            <figcaption class="figure-caption">Fig. 5: sequential decision process and cell occupancy updates.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>Fig. 5 illustrates how actions at one step transform the real state and represented cell state at the next step.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>真实车辆运动是连续的，但模型用 cells 表示。图里展示了实际位置和离散表示之间的转换。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>连续运动被投影到离散 cell state 中。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>Level 2 uses a 24 x 24 grid with smaller cells, allowing a vehicle to occupy multiple cells according to its physical dimensions.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>Level 2 更接近车辆真实长度和宽度，因此能更精细地表达占用空间，但训练压力明显上升。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Level 2 用细网格提升几何精度。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The authors state that coordinated joint actions guarantee collision-free behavior while the reward function pushes the learned policy toward delay minimization.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这是全篇最关键的二分：安全由动作可行集过滤保证，效率由 reward 学习推动。不是只靠 reward 避免碰撞。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>安全靠约束过滤，效率靠 reward 学习。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：安全与奖励分离</strong>如果只用碰撞惩罚作为 reward，训练中可能出现危险探索。DCL-AIM 更接近 action masking：先排除危险动作，再优化延误。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>这与 constrained JSSP/RL 很接近：feasible schedule 保证安全，objective 再优化 delay 或 weighted delay。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十四页展示动作如何更新 cell occupancy，并强调 DCL-AIM 的安全约束与延误优化是分开的。</div>
+        <div class="terms"><strong>Key terms</strong><span>sequential decision</span><span>24 x 24 grid</span><span>collision-free constraint</span><span>action masking</span><span>Poisson process</span></div>
+      </section>
+
+      <section class="page-card" id="page-15">
+        <div class="page-head">
+          <h2>Page 15: Poisson Vehicle Generation and Learning Parameters</h2>
+          <span class="tag">Simulation Setup</span>
+        </div>
+        <div class="overview">本页解释车辆如何随机生成：每个仿真步按 Poisson arrival 逻辑决定是否有车进入。随后给出 DCL-AIM 的核心学习参数。</div>
+        <div class="figure-grid">
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/fig06_traffic_inflow_distribution.png" alt="Figure 6 traffic inflow distribution">
+            <figcaption class="figure-caption">Fig. 6: traffic inflow distribution under different ITGR values.</figcaption>
+          </figure>
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/table02_parameters.png" alt="Table 2 DCL-AIM parameters">
+            <figcaption class="figure-caption">Table 2: epsilon, learning rate, discount factor, and step size.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The paper uses a Poisson process to avoid unrealistically uniform arrivals and to create stochastic traffic demand.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>Poisson 生成让车辆到达有随机性，适合模拟不同 traffic generating rate 下的非均匀车流。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>车辆到达用 Poisson 过程随机生成。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>Fig. 6 shows how higher inflow rates shift the distribution toward more vehicles arriving in each step.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>ITGR 越高，每个 step 出现多辆车的概率越大，路口更容易进入密集交互状态。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>车流强度越高，协调需求越频繁。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The parameter table sets high exploration probability, moderate learning rate, high discount factor, and a 0.5-second decision step.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>高折扣因子说明策略重视长期延误；0.5 秒步长让动作更新频率较高；学习率过大可能震荡，过小则收敛慢。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>参数设置平衡探索、学习速度和长期收益。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：Poisson arrival</strong>Poisson 假设在短时间间隔内到达事件近似独立，适合建模随机到达，但不一定覆盖 platoon、信号上游释放或真实相关性。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的实验可用 Poisson、真实轨迹数据或混合分布生成 release times；priority-aware 还需要类别分布和权重分布。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十五页定义随机交通输入和学习参数，是后续延误对比和收敛曲线的实验基础。</div>
+        <div class="terms"><strong>Key terms</strong><span>Poisson process</span><span>ITGR</span><span>epsilon</span><span>learning rate</span><span>discount factor</span><span>step size</span></div>
+      </section>
+
+      <section class="page-card" id="page-16">
+        <div class="page-head">
+          <h2>Page 16: Learning Performance and Convergence</h2>
+          <span class="tag">Convergence</span>
+        </div>
+        <div class="overview">本页展示 DCL-AIM 在两个离散化 level 下的收敛，以及 individual rewards 与 coordination learning 的差异。核心结论是：协调式更新能学到更好的策略。</div>
+        <div class="figure-grid">
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/fig07_convergence_discretization.png" alt="Figure 7 convergence in two discretization levels">
+            <figcaption class="figure-caption">Fig. 7: convergence examples for discretization levels 1 and 2.</figcaption>
+          </figure>
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/fig08_individual_vs_coordination_rewards.png" alt="Figure 8 individual rewards versus coordination learning">
+            <figcaption class="figure-caption">Fig. 8: individual reward learning converges to a poorer policy than coordination learning.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The convergence plots show episodic rewards improving quickly and then stabilizing, with later noise caused by exploration.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>reward 曲线越接近稳定，说明策略逐渐学会减少延误。后期波动主要来自 epsilon-greedy 的随机探索。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL-AIM 在仿真中能够较快收敛。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The individual-reward case can still converge, but it converges to lower reward, meaning higher delay.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>如果所有状态都只看 individual reward，车辆可能做局部合理但全局较差的动作。协调 reward 能把冲突车辆的联合效果纳入学习。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>只看个体奖励会降低整体策略质量。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The authors use these curves to justify that DCL decomposes the problem without sacrificing too much global performance.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这正是 DCL 的卖点：不要全局 joint Q 的爆炸复杂度，但也不要完全独立学习的局部短视。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL 在复杂度和全局性能之间折中。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：收敛不等于最优</strong>曲线收敛说明训练稳定到某个策略，但不证明全局最优。尤其在函数近似、随机输入和有限 episode 下，实验结论主要是经验性的。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>如果你的方法使用 RL，需要报告收敛、稳定性、随机种子敏感性，以及不同 traffic demand 下的泛化。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十六页证明 DCL-AIM 可以稳定学习，并显示协调 reward 比纯个体 reward 更能降低系统延误。</div>
+        <div class="terms"><strong>Key terms</strong><span>episodic reward</span><span>convergence</span><span>individual rewards</span><span>coordination learning</span><span>global performance</span></div>
+      </section>
+
+      <section class="page-card" id="page-17">
+        <span id="effectiveness"></span>
+        <div class="page-head">
+          <h2>Page 17: Effectiveness Comparison and Average Delay</h2>
+          <span class="tag">Evaluation</span>
+        </div>
+        <div class="overview">本页进入效果对比：DCL-AIM 和 FCFS-AIM、LQF-AIM、Signal 在同样车流场景下比较平均延误。Fig. 9 是主要结果图。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/fig09_average_delay_comparison.png" alt="Figure 9 average delay comparison">
+            <figcaption class="figure-caption">Fig. 9: average delay comparison under different traffic generating rates.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The comparison uses trained DCL-AIM policies and benchmarks against FCFS, LQF, and Webster-style signal control.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这里比较的是训练完成后的执行表现，不是训练过程中的 reward。基准覆盖 AIM 规则、排队启发式和传统信号控制。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>实验用三类 baseline 评价 DCL-AIM 的实际控制效果。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>Fig. 9 shows DCL-AIM achieving lower average delay across traffic rates, while signal control remains much higher in light and medium traffic.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>图中青色 DCL-AIM 柱通常最低，说明它能更好利用无信号 CAV 的细粒度时空资源。信号控制在轻流量下浪费绿灯相位和冲突区空档。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL-AIM 在平均延误上优于三种 baseline。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The page notes that after training, the learned policy can be read and executed very quickly at each decision step.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>Q-table 查询很快，这是表格型 RL 的部署优势。代价是 state/action 粒度不能无限细，否则表会变大。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>训练后执行开销低，适合实时决策。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的实验也应比较 FCFS、LQF 或 signal；同时加入 priority-weighted metrics，例如 weighted average delay 和 emergency/service class delay。</div>
+          <div class="callout hard"><strong>难点批注：公平比较</strong>baseline 必须在相同 arrival process、同样仿真时长、同样安全约束下比较。否则平均延误差异可能来自设置而非算法。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十七页给出核心结果：DCL-AIM 在多个车流强度下平均延误更低，并且训练后执行速度很快。</div>
+        <div class="terms"><strong>Key terms</strong><span>average delay</span><span>FCFS-AIM</span><span>LQF-AIM</span><span>Signal</span><span>execution time</span><span>benchmark</span></div>
+      </section>
+
+      <section class="page-card" id="page-18">
+        <div class="page-head">
+          <h2>Page 18: Randomness, Delay Fluctuation, and Safety Buffer</h2>
+          <span class="tag">Robustness</span>
+        </div>
+        <div class="overview">本页强调随机车流下的稳定性。Fig. 10 展示 100 次仿真的延误波动，作者认为 DCL-AIM 比 FCFS 更能处理随机性；同时讨论安全 buffer 与 cell-based safety。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/fig10_delay_fluctuation.png" alt="Figure 10 delay fluctuation">
+            <figcaption class="figure-caption">Fig. 10: delay fluctuation over 100 simulation runs.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The authors run each traffic-generating scenario many times to reduce the impact of randomness and report confidence intervals.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>随机到达会让单次仿真不稳定，所以重复 100 次是必要的。柱状图的误差线反映不同随机种子的结果波动。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>多次仿真用于检验随机车流下的稳定性。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>Fig. 10 indicates that FCFS delay fluctuates more strongly, while DCL-AIM stays lower and smoother under the same demand.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>FCFS 的优先级完全依赖到达顺序，所以随机到达顺序会显著影响总延误。DCL-AIM 学到的策略能利用冲突结构缓冲这种随机性。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL-AIM 对随机交通输入更稳定。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The safety-buffer discussion contrasts FCFS-style extra buffer with DCL-AIM's occupancy and desired-cell mechanism.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>DCL-AIM 不额外加固定安全 buffer，而是通过 occupying/desired cells 和 coordinated joint actions 排除前后/侧向碰撞。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL-AIM 的安全性来自 cell conflict filtering。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout hard"><strong>难点批注：robustness</strong>这里的 robustness 主要指随机车流下延误波动较小，不等于对通信失败、传感误差或混合交通的安全鲁棒性。</div>
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的论文可以把 robustness 分成 demand randomness、priority mix randomness、arrival prediction error 和 safety perturbation 四类指标。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十八页说明 DCL-AIM 不仅平均延误低，而且在随机仿真中的波动较小；安全机制来自 cell occupancy 约束。</div>
+        <div class="terms"><strong>Key terms</strong><span>randomness</span><span>confidence interval</span><span>delay fluctuation</span><span>safety buffer</span><span>robustness</span></div>
+      </section>
+
+      <section class="page-card" id="page-19">
+        <div class="page-head">
+          <h2>Page 19: LQF, Signal Control, Congestion Scenarios, and Table 3</h2>
+          <span class="tag">Congestion</span>
+        </div>
+        <div class="overview">本页深入解释 baseline 表现：LQF 短期合理但长期不一定最好；signal 控制稳定但浪费 CAV 时空资源；接着用三种拥堵场景比较 intersection delay。</div>
+        <div class="figure-grid">
+          <figure class="figure-block">
+            <img src="DCL_AIM_2019_assets/table03_delay_comparison.png" alt="Table 3 delay comparison">
+            <figcaption class="figure-caption">Table 3: intersection delay comparison in congestion scenarios.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The LQF discussion says serving the longest queue can be locally attractive but may not be best over a longer horizon.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>LQF 类似“当前哪个队长先放哪个”，但它可能忽略未来冲突结构和非冲突方向的并行利用。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>LQF 是短视启发式，长期不一定最优。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The signal-control paragraph explains why signals can have low variance yet high delay: they restrict simultaneous movements and waste unused directions.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>信号灯稳定，但相位限制会让很多本来可同时通过的 CAV 轨迹被迫等待，特别是在轻中流量下效率低。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>信号控制稳定但空间时间资源利用率低。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The congestion scenarios test asymmetric and multi-direction high inflow to see how policies behave near capacity.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>Table 3 显示当多个方向拥堵时，所有方法都恶化，但 DCL 仍能维持更低总延误。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>拥堵场景下 DCL-AIM 仍保持相对优势。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>Priority-aware insight</strong>LQF 本身是一种“队列长度优先”，不是车辆类别优先。你的 priority-aware JSSP 可以把“系统拥堵优先”和“车辆类别权重”分开建模。</div>
+          <div class="callout hard"><strong>难点批注：capacity effect</strong>当路口接近容量上限，算法差异会被物理容量限制压缩；评估时要报告 demand range，而不是只看轻流量。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第十九页比较 LQF、signal 和 DCL-AIM 在拥堵情形中的机制差异，说明 DCL-AIM 更会利用剩余时空资源。</div>
+        <div class="terms"><strong>Key terms</strong><span>LQF</span><span>Webster signal</span><span>capacity</span><span>congestion scenario</span><span>intersection delay</span></div>
+      </section>
+
+      <section class="page-card" id="page-20">
+        <div class="page-head">
+          <h2>Page 20: Step Delay, Congestion Evacuation, and Conclusions Begin</h2>
+          <span class="tag">Dynamic Result</span>
+        </div>
+        <div class="overview">本页用 Fig. 11 展示延误随仿真步变化的曲线，重点是拥堵发展和停止生成车辆后的疏散速度。随后开始论文结论。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/fig11_step_delay_comparison.png" alt="Figure 11 step delay comparison">
+            <figcaption class="figure-caption">Fig. 11: step delay comparison in congestion evacuation.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The step-delay plot shows how delay accumulates during congestion and how quickly each policy clears the queue after arrivals stop.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>相比平均延误，step delay 更像过程诊断图：可以看出哪个策略在拥堵形成后更快恢复。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Fig. 11 展示 DCL-AIM 的拥堵疏散优势。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>DCL-AIM keeps delay lower during the congested period and returns to zero faster than the alternatives.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这说明 DCL-AIM 不只是轻流量下好，也能在拥堵过程中选择更有效的释放顺序。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>DCL-AIM 在拥堵演化过程中保持较低延误。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The conclusion begins by restating AIM as a CAV-specific alternative to conventional intersection control.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>作者回到宏观动机：CAV 允许更细粒度、更自动化的路口控制，因此 AIM 是信号控制之外的方案。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>结论重申 CAV-AIM 的应用价值。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的实验可以加入 queue evacuation time 或 recovery time，衡量策略在突发高需求后的恢复能力。</div>
+          <div class="callout hard"><strong>难点批注：process metric</strong>单个平均值会掩盖拥堵形成过程。step delay 曲线能说明策略是在早期预防拥堵，还是后期快速清空拥堵。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第二十页通过 step delay 证明 DCL-AIM 在拥堵动态过程中更稳，并进入最终结论。</div>
+        <div class="terms"><strong>Key terms</strong><span>step delay</span><span>congestion developing</span><span>evacuation time</span><span>recovery</span><span>conclusion</span></div>
+      </section>
+
+      <section class="page-card" id="page-21">
+        <div class="page-head">
+          <h2>Page 21: Discretization Level 2, Final Conclusions, and Future Work</h2>
+          <span class="tag">Conclusion</span>
+        </div>
+        <div class="overview">本页给出 Level 2 结果并总结全文。作者认为 DCL-AIM 能缓解维度灾难和非平稳性，但未来需要处理部分可观测和网络级多路口问题。</div>
+        <div class="figure-grid">
+          <figure class="figure-block wide">
+            <img src="DCL_AIM_2019_assets/fig12_discretization_level2_delay.png" alt="Figure 12 discretization level 2 delay comparison">
+            <figcaption class="figure-caption">Fig. 12: intersection delay comparison under discretization level 2.</figcaption>
+          </figure>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01</div>
+            <div class="col"><span class="label">English reading note</span><p>The level-2 experiment shows similar qualitative conclusions under a finer cell grid, although delay levels and variance change.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这说明 DCL-AIM 不只适用于粗网格；但 finer grid 下所有方法延误都更大，说明细粒度表达增加了决策复杂度。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Level 2 验证了方法在细粒度离散下仍有效。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P02</div>
+            <div class="col"><span class="label">English reading note</span><p>The conclusion states that CAV crossing can be modeled as multi-agent MDPs with cooperative rewards and collision-free constraints.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>作者最终把本文贡献压缩为：MAMDP 建模、DCL 分解、无碰撞约束、延误最小化 reward、仿真优于 baseline。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>全文结论是 DCL-AIM 能学习更优通行序列。</p></div>
+          </div>
+          <div class="para">
+            <div class="pid">P03</div>
+            <div class="col"><span class="label">English reading note</span><p>The future-work paragraph admits limitations: fully observable isolated intersection today, partial observability and network-wide management tomorrow.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这正是论文的边界。现实部署需要考虑多路口协调、通信缺失、感知误差和混合交通。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>未来工作指向部分可观测和网络级 AIM。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>JSSP/AIM 连接</strong>你的 centralized priority-aware constrained JSSP 可以作为另一种更可解释的方向：不依赖完全分布式学习，但可利用冲突资源模型和 priority weights。</div>
+          <div class="callout warning"><strong>研究空白</strong>DCL-AIM 未显式处理车辆异质性、优先级、公平性、人类驾驶混合、形式化安全证明和网络级协调。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第二十一页收束全文：DCL-AIM 在细粒度网格中仍表现较好，但方法依赖单路口、全可观测和纯 CAV 假设。</div>
+        <div class="terms"><strong>Key terms</strong><span>discretization level 2</span><span>partial observability</span><span>network-wide AIM</span><span>limitations</span><span>future work</span></div>
+      </section>
+
+      <section class="page-card" id="page-22">
+        <span id="references-map"></span>
+        <div class="page-head">
+          <h2>Page 22: References Map I, AIM Foundations</h2>
+          <span class="tag">References</span>
+        </div>
+        <div class="overview">References 页不逐条翻译，而是整理对你研究最有用的引用地图。Page 22 的重点是 AIM 基础、CAV 交通控制和早期 reservation 思路。</div>
+        <div class="citation-map">
+          <div class="callout"><strong>AIM foundations</strong>重点关注 Dresner and Stone 系列 reservation-based AIM。它们定义了 CAV 预约、冲突检查、FCFS 等基础概念，是写 AIM 背景绕不开的引用。</div>
+          <div class="callout"><strong>Signal control comparison</strong>Webster 传统信号控制可作为 baseline 背景，用来说明 CAV-AIM 为什么能突破固定相位限制。</div>
+          <div class="callout"><strong>CAV enabling technologies</strong>关于 V2V/V2I、自动控制和智能交通系统的引用可服务 introduction，但不要让它们喧宾夺主。</div>
+          <div class="callout research"><strong>Priority-aware JSSP/AIM use</strong>这些基础引用可放在你的 Related Work 第一段：AIM 从 reservation protocol 发展到 optimization 和 learning-based policies。</div>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01<br>refs</div>
+            <div class="col"><span class="label">English reading note</span><p>This reference page mostly anchors the paper in established AIM and traffic control literature.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>不用逐条翻译，但要识别哪些是“定义问题”的引用，哪些只是背景补充。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Page 22 是 AIM 基础引用池。</p></div>
+          </div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第二十二页的引用适合支撑 AIM 背景、reservation protocol 和传统信号控制 baseline。</div>
+        <div class="terms"><strong>Key terms</strong><span>Dresner and Stone</span><span>reservation AIM</span><span>traffic signal control</span><span>CAV control</span></div>
+      </section>
+
+      <section class="page-card" id="page-23">
+        <div class="page-head">
+          <h2>Page 23: References Map II, Optimization-based AIM and Scheduling</h2>
+          <span class="tag">References</span>
+        </div>
+        <div class="overview">本页引用更适合支撑 optimization-based AIM：混合整数规划、车辆排序、轨迹/速度规划和容量优化。它们与你的 JSSP 方向关系最直接。</div>
+        <div class="citation-map">
+          <div class="callout"><strong>Optimization AIM</strong>寻找用 MILP、optimal control、reservation scheduling 或 trajectory planning 处理路口的文献，作为你的 constrained JSSP 的近邻工作。</div>
+          <div class="callout"><strong>Scheduling angle</strong>关注车辆顺序、通行时间、冲突区占用和延误目标，这些可被重写为 jobs、machines/resources、operations 和 precedence constraints。</div>
+          <div class="callout"><strong>Limitations to cite</strong>优化方法常见痛点是实时性、组合爆炸、连续动力学与安全距离约束复杂。</div>
+          <div class="callout research"><strong>Priority-aware gap</strong>多数 optimization AIM 优化平均延误或吞吐，很少把 emergency/bus/truck 等 priority weights 系统纳入 JSSP objective。</div>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01<br>refs</div>
+            <div class="col"><span class="label">English reading note</span><p>The optimization references are useful for framing AIM as a constrained sequencing and resource allocation problem.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这组引用可以帮你把“路口通行”自然过渡到“调度/资源分配”语言。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Page 23 是 JSSP/AIM 相关引用的重点区域。</p></div>
+          </div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第二十三页引用地图适合支撑你的 constrained scheduling formulation，尤其是车辆排序、时空资源占用和实时求解压力。</div>
+        <div class="terms"><strong>Key terms</strong><span>optimization-based AIM</span><span>sequencing</span><span>resource allocation</span><span>MILP</span><span>scheduling</span></div>
+      </section>
+
+      <section class="page-card" id="page-24">
+        <div class="page-head">
+          <h2>Page 24: References Map III, MARL and DCL Theory</h2>
+          <span class="tag">References</span>
+        </div>
+        <div class="overview">本页引用可用来解释多智能体学习的理论问题：集中式联合动作空间太大，独立学习造成非平稳环境，DCL 用上下文独立性和局部协调折中。</div>
+        <div class="citation-map">
+          <div class="callout"><strong>MARL theory</strong>用于解释 multi-agent MDP、joint policy、joint action-value、coordination graph 或 DCL 的基本概念。</div>
+          <div class="callout"><strong>DCL-specific value</strong>DCL 相关引用能支撑“稀疏交互系统不需要全局联合学习”的理论动机。</div>
+          <div class="callout"><strong>RL traffic control</strong>强化学习信号控制和交通管理引用可用来说明 RL 在交通中已有应用，但 AIM 任务更依赖安全冲突约束。</div>
+          <div class="callout research"><strong>How to position your work</strong>你可以写：DCL-AIM shows MARL can improve AIM, while our work studies a centralized priority-aware JSSP formulation with explicit constraints and weighted delay.</div>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01<br>refs</div>
+            <div class="col"><span class="label">English reading note</span><p>The learning references provide the theoretical language for dimensionality, nonstationarity, and local coordination.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>这些引用不是你的主线，但能帮助你准确评价 DCL-AIM 为什么这样设计。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>Page 24 支撑 MARL/DCL 理论背景。</p></div>
+          </div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第二十四页引用主要用于解释 DCL-AIM 的学习理论基础，以及它和普通独立 Q-learning、集中式 MARL 的区别。</div>
+        <div class="terms"><strong>Key terms</strong><span>MARL</span><span>DCL</span><span>coordination learning</span><span>nonstationarity</span><span>Q-learning</span></div>
+      </section>
+
+      <section class="page-card" id="page-25">
+        <div class="page-head">
+          <h2>Page 25: References Map IV, Simulation, Evaluation, and Takeaway</h2>
+          <span class="tag">References</span>
+        </div>
+        <div class="overview">最后一页引用可整理为仿真、评估、交通流模型和安全/部署相关背景。最终 takeaway：DCL-AIM 是重要的 RL-based AIM 对照，但不是 priority-aware JSSP。</div>
+        <div class="citation-map">
+          <div class="callout"><strong>Simulation references</strong>用于支撑 Poisson arrivals、traffic demand scenarios、Webster signal baseline 和多次随机仿真。</div>
+          <div class="callout"><strong>Evaluation metrics</strong>平均延误、intersection delay、step delay、congestion evacuation time 和 confidence interval 都适合迁移到你的实验设计。</div>
+          <div class="callout warning"><strong>Missing deployment issues</strong>DCL-AIM 没有深入通信延迟、混合人类驾驶、priority fairness、形式化安全证明和多路口网络控制。</div>
+          <div class="callout research"><strong>Final research takeaway</strong>DCL-AIM 可作为“learning-based decentralized AIM baseline”。你的 contribution 可以强调 priority weights、JSSP resource occupation、constraint satisfaction 和可解释调度。</div>
+        </div>
+        <div class="section-title">Paragraph-by-paragraph reading</div>
+        <div class="paras">
+          <div class="para">
+            <div class="pid">P01<br>refs</div>
+            <div class="col"><span class="label">English reading note</span><p>The final reference page rounds out the empirical and methodological background rather than adding new claims.</p></div>
+            <div class="col"><span class="label">中文解释</span><p>读 references 不需要平均用力。对你的论文最有用的是：AIM 基础、优化/调度式 AIM、MARL/DCL、实验评价四类。</p></div>
+            <div class="col"><span class="label">Chinese summary</span><p>References 的价值在于建立你的 related work 框架。</p></div>
+          </div>
+        </div>
+        <div class="note-grid">
+          <div class="callout research"><strong>可直接写入 literature review 的一句话</strong>DCL-AIM demonstrates that decentralized MARL can exploit sparse interactions among CAVs, but it optimizes unweighted delay and does not model heterogeneous priority classes or JSSP-style conflict-zone resource schedules.</div>
+          <div class="callout hard"><strong>读完后的方法定位</strong>DCL-AIM 的“资源”是 cell occupancy；你的方法的“资源”可以是 conflict zones。前者偏几何网格学习，后者偏可解释调度约束。</div>
+        </div>
+        <div class="summary-box"><strong>Chinese page summary</strong>第二十五页总结引用地图：DCL-AIM 对你的研究最重要的价值是提供 decentralized MARL AIM 对照，并暴露 priority-aware constrained scheduling 的研究空间。</div>
+        <div class="terms"><strong>Key terms</strong><span>citation map</span><span>simulation evaluation</span><span>weighted delay gap</span><span>JSSP resource model</span><span>research positioning</span></div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

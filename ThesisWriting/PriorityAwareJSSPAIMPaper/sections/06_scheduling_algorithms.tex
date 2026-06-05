@@ -1,0 +1,43 @@
+\section{Scheduling Algorithms}
+
+The formulation can be evaluated with both interpretable baselines and learning-based dispatching. The key requirement is that every algorithm must use the same feasibility checker so that comparisons are about scheduling quality, not about whether one method is allowed to violate safety.
+
+\subsection{Interpretable Baselines}
+
+\textbf{FCFS reservation.} Vehicles are scheduled in increasing release-time order. This baseline is simple and historically important in reservation-based AIM \cite{dresner2008multiagent}. It is expected to be competitive at low traffic density, where conflicts are sparse.
+
+\textbf{Greedy earliest completion.} At each decision step, choose the feasible operation or vehicle that produces the smallest immediate completion time or delay increase. This baseline tests whether local efficiency is enough.
+
+\textbf{Priority-weighted greedy.} At each decision step, choose the feasible action with the largest weighted urgency, such as $w_i$ times accumulated delay or predicted delay reduction. This baseline is important because it tests whether the proposed priority objective can be solved well by a simple heuristic without RL.
+
+\textbf{Deadlock-aware greedy.} Greedy choices are filtered through graph cycle checks or another deadlock-freeness test. This is a stronger non-learning baseline because it uses the same safety logic as the constrained-JSSP formulation.
+
+\subsection{Optimization Benchmark}
+
+For small horizons, a MILP or CP-SAT formulation can be used to estimate optimality gaps. The exact benchmark should include the same release-time, conflict-zone capacity, same-lane order, and weighted-delay objective as the proposed formulation. It should not be used as the primary real-time controller unless runtime is acceptable for the chosen horizon size.
+
+\subsection{PPO/GNN Dispatching Policy}
+
+A learning-based scheduler can model the constrained-JSSP dispatching process as a Markov decision process, following the general direction of JSSP learning and AIM-RL work \cite{huang2023reinforcement,zhang2020learning,park2021learning}. Zhang et al. show that a JSSP dispatching policy can operate on an evolving disjunctive graph and select eligible operations \cite{zhang2020learning}. Huang et al. adapt that idea to AIM by making the action set traffic-feasible under blocking, deadlock, and arrival-time constraints \cite{huang2023reinforcement}. The proposed priority-aware version keeps the same dispatching structure but changes the features and reward to reflect heterogeneous traffic.
+
+The state can include:
+\begin{itemize}
+    \item operation features: scheduled status, release time, earliest start time, processing time, vehicle class, and priority weight;
+    \item resource features: current zone occupancy, next available time, and blocking status;
+    \item graph features: trajectory precedence edges, same-lane FIFO edges, and unresolved resource-conflict edges.
+\end{itemize}
+The action is to select a currently feasible operation or vehicle dispatching decision. Invalid actions must be masked before action sampling. The mask should remove operations that violate release time, trajectory order, same-lane order, conflict-zone availability, blocking feasibility, safety headway, or deadlock-freeness. The state transition then assigns the selected operation its earliest feasible start time and updates the directed timing graph, resource availability, vehicle progress, and blocking status.
+
+The reward can be negative incremental weighted delay:
+\begin{equation}
+    R_t = -\Delta\left(\sum_i w_iD_i\right),
+\end{equation}
+with optional fairness and stability penalties. This differs from generic JSSP-RL rewards based on makespan lower-bound improvement because the traffic objective is service delay rather than factory makespan. This policy may be encoded with a graph neural network and trained with PPO, but the paper does not claim that such a policy has already been implemented.
+
+The learned policy is therefore an efficiency component, not a safety certificate. Collision-freeness and deadlock-freeness must be guaranteed by the feasibility checker and graph verification logic before an action is committed.
+
+\subsection{Hybrid Policy}
+
+The literature and the local research notes both suggest that simple policies may be sufficient under low density, while learned policies may be more useful when conflicts are dense. A future implementation can test a hybrid controller that uses FCFS or priority-greedy under low load and switches to PPO/GNN dispatching when the number of active vehicles or conflict-zone contention exceeds a threshold.
+
+\placeholder{Define the exact switching threshold and RL architecture after baseline simulator results are available.}

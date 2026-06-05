@@ -1,0 +1,72 @@
+\section{System Model}
+
+\subsection{Intersection and Conflict Zones}
+
+Consider a single unsignalized intersection managed by a centralized intersection manager. The intersection is partitioned into a finite set of non-overlapping conflict zones
+\begin{equation}
+    \zones = \{z_1,z_2,\ldots,z_m\}.
+\end{equation}
+Each conflict zone is a reusable resource with unit capacity: at most one vehicle may occupy a zone at any time. The granularity of the partition is a modeling choice. A coarse partition reduces computation but may be conservative; a fine partition can represent more detailed interactions at higher scheduling cost.
+
+Let $\trajectories$ be the set of feasible movements through the intersection, such as straight, left-turn, and right-turn trajectories. Each feasible trajectory is represented as an ordered sequence of conflict zones.
+
+\subsection{Vehicle Representation}
+
+Let
+\begin{equation}
+    \vehicles = \{1,2,\ldots,n\}
+\end{equation}
+be the set of vehicles considered in one scheduling horizon. Vehicle $i$ is represented by
+\begin{equation}
+    x_i = (r_i, T_i, q_i, w_i, \ell_i, \nu_i),
+\end{equation}
+where $r_i$ is the release time or earliest arrival time at the first relevant conflict zone, $T_i$ is the predicted trajectory, $q_i$ is the vehicle class, $w_i$ is the priority weight, $\ell_i$ is the vehicle length or size descriptor, and $\nu_i$ denotes current motion features such as position, speed, and acceleration.
+
+The trajectory of vehicle $i$ is
+\begin{equation}
+    T_i = (z_{i,1},z_{i,2},\ldots,z_{i,n_i}),
+\end{equation}
+where $z_{i,k}\in \zones$ is the $k$-th conflict zone occupied by vehicle $i$. The corresponding operation $o_{i,k}$ means that vehicle $i$ occupies conflict zone $z_{i,k}$ for processing time $p_{i,k}$.
+
+\begin{table}[t]
+\centering
+\caption{AIM to JSSP Mapping}
+\label{tab:mapping}
+\begin{tabular}{ll}
+\toprule
+AIM concept & JSSP concept \\
+\midrule
+Vehicle & Job \\
+Conflict zone & Machine/resource \\
+Zone traversal & Operation \\
+Traversal time & Processing time \\
+Trajectory & Ordered operation sequence \\
+Earliest arrival & Release time \\
+Passing order & Schedule/dispatching policy \\
+Vehicle priority & Weighted objective or hard priority \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Vehicle Classes and Priority}
+
+Vehicle class $q_i$ can include passenger cars, buses, trucks, and emergency or service vehicles. Priority weights should have a transport interpretation rather than being arbitrary constants. Passenger cars can be the baseline. Bus weights can reflect person-delay or service priority. Truck differences can be represented by longer processing times and safety headways, with an optional additional delay weight if the operational objective justifies it. Emergency vehicles can be handled through either very high weights or hard-priority constraints when safety allows.
+
+\begin{table}[t]
+\centering
+\caption{Example Priority Interpretation}
+\label{tab:priority}
+\begin{tabular}{lll}
+\toprule
+Class & Physical role & Priority treatment \\
+\midrule
+Car & Baseline & $w_i=1$ \\
+Truck & Longer occupancy/headway & Larger $p_{i,k}$ or $h_{ij}$ \\
+Bus & Higher person-delay & Occupancy-based $w_i$ \\
+Emergency & Response-critical & Hard or very high priority \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\placeholder{Calibrate exact priority weights after the simulation environment and target scenario are fixed.}
+

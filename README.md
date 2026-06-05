@@ -45,6 +45,11 @@ where `r_i` is the earliest arrival time, `t_i` is the trajectory, `class_i` is 
 |-- Notes/
 |   |-- PaperAndMeetingIdea.md
 |   |-- SupervisorEmailMap.md
+|   |-- Khayatian_etal_2020_CAV_Intersection_Management_Reading.html
+|   |-- Khayatian_etal_2020_CAV_Intersection_Management_PageByPage_Reading.html
+|   |-- Khayatian_etal_2020_assets/
+|   |-- DCL_AIM_2019_Decentralized_Coordination_Learning_PageByPage_Reading.html
+|   |-- DCL_AIM_2019_assets/
 |-- Pic/
 |   |-- JSSPTraffic.png
 |-- ProjectCode/
@@ -57,6 +62,9 @@ where `r_i` is the earliest arrival time, `t_i` is the trajectory, `class_i` is 
 - [ResearchPlan.md](ResearchPlan.md): detailed research design, including formulation, RL/MDP setup, baselines, evaluation metrics, risks, and references.
 - [Notes/PaperAndMeetingIdea.md](Notes/PaperAndMeetingIdea.md): readable summary of the source paper and supervisor discussion.
 - [Notes/SupervisorEmailMap.md](Notes/SupervisorEmailMap.md): email-ready map for agreeing on the research direction with the supervisor.
+- [Notes/Khayatian_etal_2020_CAV_Intersection_Management_Reading.html](Notes/Khayatian_etal_2020_CAV_Intersection_Management_Reading.html): bilingual chapter-level reading notes for Khayatian et al. 2020, with figure/table screenshots, Chinese summaries, difficult-concept annotations, and links to the priority-aware JSSP/AIM direction.
+- [Notes/Khayatian_etal_2020_CAV_Intersection_Management_PageByPage_Reading.html](Notes/Khayatian_etal_2020_CAV_Intersection_Management_PageByPage_Reading.html): page-by-page bilingual reading notes for Khayatian et al. 2020, with paragraph-level English reading notes, Chinese explanations, Chinese summaries, and a reference-map section.
+- [Notes/DCL_AIM_2019_Decentralized_Coordination_Learning_PageByPage_Reading.html](Notes/DCL_AIM_2019_Decentralized_Coordination_Learning_PageByPage_Reading.html): page-by-page bilingual reading notes for the DCL-AIM 2019 paper, covering MAMDP formulation, desired/occupying cells, DCL-AIM Q-table decomposition, simulation results, and links to the priority-aware JSSP/AIM direction.
 - [Doc/DATE 2023 PDF](Doc/Reinforcement-learning-based_job-shop_scheduling_for_intelligent_intersection_management.pdf): local copy of the source paper.
 - [Pic/JSSPTraffic.png](Pic/JSSPTraffic.png): photo/sketch from the research discussion.
 
@@ -80,6 +88,8 @@ Documentation stage:
 - Source paper summarized.
 - Supervisor email map prepared.
 - Detailed research plan drafted.
+- Khayatian et al. 2020 CAV intersection management survey converted into chapter-level and page-by-page bilingual HTML reading notes in `Notes/`.
+- DCL-AIM 2019 decentralized coordination learning paper converted into page-by-page bilingual HTML reading notes in `Notes/`.
 
 Implementation has not started yet. `ProjectCode/` is currently reserved for future simulation, optimization, and reinforcement learning code.
 

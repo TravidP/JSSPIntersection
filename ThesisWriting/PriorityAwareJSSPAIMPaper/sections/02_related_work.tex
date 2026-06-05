@@ -1,0 +1,52 @@
+\section{Related Work}
+
+\subsection{Reservation-Based Autonomous Intersection Management}
+
+Reservation-based AIM treats the intersection as a shared space-time resource. Dresner and Stone proposed a multiagent reservation protocol in which autonomous vehicles request intersection reservations and the intersection manager accepts or rejects those requests \cite{dresner2008multiagent}. That work established the central idea that signal-free intersections can coordinate autonomous vehicles more flexibly than traditional lights or stop signs, and it also considered mixed traffic and emergency-vehicle priority. Surveys by Chen and Englund \cite{chen2016cooperative}, Rios-Torres and Malikopoulos \cite{riosTorres2017survey}, and Khayatian et al. \cite{khayatian2020survey} organize later CAV intersection-management methods by communication architecture, safety guarantees, optimization method, and deployment challenges.
+
+The present work follows the resource-allocation view of AIM but replaces simple request-order logic with a priority-aware scheduling formulation. This is important because first-come-first-served (FCFS) policies can be reasonable under low traffic density, yet may not exploit the full scheduling flexibility available when many vehicles compete for multiple conflict zones.
+
+\subsection{Graph-Based Conflict-Zone Scheduling}
+
+Graph-based AIM partitions the intersection into conflict zones and represents timing relationships between vehicle-zone pairs. Lin et al. introduced a graph-based model with formal deadlock-freeness analysis and a centralized cycle-removal scheduling algorithm \cite{lin2019graph}. Huang et al. later transformed this graph-based scheduling model into a constrained JSSP and trained a PPO policy for dispatching \cite{huang2023reinforcement}. Their formulation explicitly accounts for traffic-specific constraints, including blocking, deadlock, and arrival-time constraints. Ahn and Del Vecchio also used job-shop scheduling to verify intersection collision avoidance, showing that the scheduling abstraction is useful beyond purely manufacturing settings \cite{ahn2016semi}.
+
+This paper keeps the graph/JSSP safety structure but adds heterogeneous priority and weighted delay. The resulting formulation is not a standard JSSP: it includes release times, physical vehicle-ordering constraints, traffic blocking, and deadlock prevention.
+
+\subsection{Optimization-Based Scheduling and Rolling Horizon}
+
+Mixed-integer optimization has been used to assign vehicle access times or reservations at autonomous intersections. Levin and Rey formulated intersection control with conflict points and proposed a rolling-horizon method for larger traffic streams \cite{levin2017conflict}. Fayazi and Vahidi proposed a mixed-integer linear programming (MILP) method for assigning optimal intersection access times to autonomous vehicles \cite{fayazi2018mixed}. Such exact formulations are valuable for small-instance validation, but their computational complexity can limit real-time deployment when many vehicles and conflict points are present.
+
+Heterogeneous traffic has also been studied in scheduling formulations. Soleimaniamiri and Li considered heterogeneous vehicle headways and values of time at a general conflict area \cite{soleimaniamiri2019scheduling}. This supports the premise that vehicle classes should influence both physical constraints and scheduling objectives. Recent priority-based search methods also provide strong non-RL alternatives for intersection coordination, especially when the problem is viewed through multi-agent path finding \cite{li2023prioritysearch}.
+
+\subsection{Reinforcement Learning for AIM and JSSP}
+
+Reinforcement learning has been explored for centralized and decentralized AIM. Guan et al. used PPO for centralized CAV coordination at a signal-free intersection \cite{guan2020centralized}. Wu et al. proposed DCL-AIM, a decentralized coordination-learning method that decomposes state information to handle the dimensionality of multi-agent intersection control \cite{wu2019dcl}. Huang et al. applied RL specifically to graph-based AIM after transforming it into a constrained JSSP \cite{huang2023reinforcement}.
+
+The JSSP literature also supports graph-based learning policies. Zhang et al. learned dispatching rules for JSSP using deep reinforcement learning \cite{zhang2020learning}. Their state is an evolving disjunctive graph with operation-level features such as a scheduled indicator and a completion-time lower bound; the action is to select one eligible operation; the transition schedules that operation at the earliest feasible machine slot and orients the corresponding disjunctive arcs; and the reward is tied to improvement in a makespan lower-bound objective. Park et al. similarly formulated JSSP scheduling with graph neural networks and PPO-style policy learning \cite{park2021learning}.
+
+Huang et al. adapt this dispatching view to graph-based AIM by replacing generic jobs and machines with vehicles and conflict zones, and by adding traffic-specific feasibility filters for precedence, blocking, deadlock, and arrival time \cite{huang2023reinforcement}. Their reward is based on the extra vehicle delay introduced by a selected operation, and their grouping strategy clusters vehicle streams by arrival time so a policy trained on smaller groups can be applied online. These works motivate a graph encoder for vehicle-zone operations, conflict-zone resources, and precedence constraints. In the proposed AIM formulation, however, RL is not the source of safety. Safety must be enforced by feasibility masks, resource constraints, and verification checks, while the learned policy proposes efficient feasible dispatching actions.
+
+\begin{table*}[t]
+\centering
+\caption{Relationship between generic JSSP-RL, JSSP-RL for AIM, and the proposed priority-aware formulation}
+\label{tab:zhang-huang-proposed}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.16\textwidth}p{0.25\textwidth}p{0.25\textwidth}p{0.25\textwidth}}
+\toprule
+Dimension & Zhang et al. \cite{zhang2020learning} & Huang et al. \cite{huang2023reinforcement} & Proposed direction \\
+\midrule
+Domain & Generic JSSP dispatching. & Graph-based AIM transformed to constrained JSSP. & Heterogeneous CAV scheduling at a single intersection. \\
+State & Disjunctive graph with scheduled status and completion lower bound. & Vehicle-zone graph/JSSP partial schedule with traffic constraints. & Graph state with class, priority, predicted arrival, processing time, occupancy, and blocking features. \\
+Action & Select an eligible operation. & Select a feasible vehicle-zone operation after filtering infeasible choices. & Select a safety-masked operation or vehicle dispatch decision. \\
+Reward & Makespan lower-bound improvement. & Extra delay introduced by the selected action. & Negative incremental weighted delay with optional fairness and stability penalties. \\
+Online handling & Static generated and benchmark JSSP instances. & Arrival-time grouping for vehicle streams. & Receding-horizon grouping with commitment windows and prediction-noise tests. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Priority and Prediction}
+
+Vehicle priority has a long history in traffic control. Transit signal priority improves bus service quality by modifying signal operation for transit vehicles \cite{lin2015transit}. Priority-based AIM schemes also consider emergency CAVs and conflict-aware priority rules \cite{zhang2021priorityaim}. These ideas motivate using passenger occupancy, vehicle class, emergency level, or value of time in the objective. For trucks, priority should not be modeled only by a larger weight; truck length and dynamics should also affect traversal time and safety headway.
+
+Prediction is needed because online AIM operates on vehicles that arrive continuously. Modern trajectory-prediction work studies multi-agent interactions, maps, dynamics, and uncertainty \cite{salzmann2020trajectron,teeti2022vision}. For a first implementation, the proposed scheduler can begin with perfect information or simple kinematic prediction, then evaluate robustness by adding controlled noise to arrival times and conflict-zone processing times.

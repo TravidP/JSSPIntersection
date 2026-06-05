@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zhang 2020 and Huang 2023 JSSP-RL AIM Section Review</title>
+  <style>
+    :root {
+      --ink: #18212f;
+      --muted: #5b6474;
+      --line: #d7dde8;
+      --paper: #fbfcff;
+      --band: #eef5ff;
+      --green: #0b6b57;
+      --blue: #1e5aa8;
+      --orange: #a35612;
+      --red: #9c2d2d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: var(--ink);
+      font: 15px/1.62 "Segoe UI", Arial, sans-serif;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px 20px 52px;
+    }
+    header {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+      border-radius: 8px;
+      padding: 26px;
+      margin-bottom: 18px;
+    }
+    h1, h2, h3 { line-height: 1.22; margin: 0 0 12px; }
+    h1 { font-size: 30px; letter-spacing: 0; }
+    h2 {
+      font-size: 22px;
+      margin-top: 30px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line);
+    }
+    h3 { font-size: 17px; margin-top: 18px; }
+    p { margin: 8px 0 12px; }
+    .meta { color: var(--muted); margin-top: 8px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card, .section-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 14px 0;
+    }
+    .section-card { border-left: 5px solid var(--blue); }
+    .section-card.huang { border-left-color: var(--green); }
+    .section-card.gap { border-left-color: var(--orange); }
+    .label {
+      display: inline-block;
+      color: #fff;
+      background: var(--blue);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .label.cn { background: var(--green); }
+    .label.warn { background: var(--orange); }
+    .bilingual {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .en, .cn {
+      border: 1px solid #e4e9f2;
+      border-radius: 8px;
+      padding: 12px;
+      background: var(--paper);
+    }
+    .cn { background: #f8fffb; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      margin: 14px 0;
+      table-layout: fixed;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+      word-wrap: break-word;
+    }
+    th { background: var(--band); text-align: left; }
+    code {
+      background: #eef2f7;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+      font-size: 0.95em;
+    }
+    ul { padding-left: 20px; }
+    li { margin: 5px 0; }
+    .figure {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 8px;
+      margin: 16px 0;
+      padding: 14px;
+      overflow-x: auto;
+    }
+    .caption {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    img {
+      max-width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+    }
+    .pill {
+      display: inline-block;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 3px 9px;
+      margin: 2px 4px 2px 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .note {
+      border-left: 4px solid var(--orange);
+      background: #fff8ee;
+      padding: 10px 12px;
+      margin: 12px 0;
+    }
+    @media (max-width: 760px) {
+      .grid, .bilingual { grid-template-columns: 1fr; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Zhang et al. 2020 and Huang et al. 2023: JSSP-RL to AIM Reading Notes</h1>
+    <p class="meta">Detailed bilingual review for the priority-aware JSSP-based autonomous intersection management project.</p>
+    <p>
+      <span class="pill">JSSP</span>
+      <span class="pill">Disjunctive graph</span>
+      <span class="pill">PPO/GNN</span>
+      <span class="pill">Autonomous intersection management</span>
+      <span class="pill">Priority-aware scheduling</span>
+    </p>
+  </header>
+
+  <section>
+    <h2>1. Executive Summary / 总体摘要</h2>
+    <div class="bilingual">
+      <div class="en">
+        <p><span class="label">EN</span>Zhang et al. 2020 is the methodological parent: it learns priority dispatching rules for standard JSSP by representing a partial schedule as an evolving disjunctive graph and training a GIN/PPO policy to select the next eligible operation.</p>
+        <p>Huang et al. 2023 is the direct AIM bridge: it maps graph-based intersection scheduling to a constrained JSSP, adds traffic-specific constraints, and trains PPO to schedule vehicle-zone operations. The paper also introduces grouping by vehicle arrival time so a trained model can be applied to continuous traffic streams.</p>
+        <p>Your research can stand on both: keep the graph/JSSP/RL structure, then add heterogeneous vehicle priority, weighted/fair delay, trajectory-predicted zone occupation times, and receding-horizon execution.</p>
+      </div>
+      <div class="cn">
+        <p><span class="label cn">中文</span>Zhang et al. 2020 是方法论基础：它把 JSSP 的部分调度状态表示为不断演化的析取图，用 GIN/PPO 学习“下一步调度哪个可执行 operation”的 dispatching rule。</p>
+        <p>Huang et al. 2023 是和自动交叉口管理最直接的桥梁：它把 graph-based intersection scheduling 转换成带约束的 JSSP，加入 blocking、deadlock、arrival time 等交通约束，并用 PPO 调度 vehicle-zone operations。它还用 arrival time grouping 处理连续到达的车辆流。</p>
+        <p>你的研究可以在这两篇之上扩展：保留 graph/JSSP/RL 框架，再加入异构车辆优先级、weighted/fair delay、轨迹预测得到的冲突区占用时间，以及 receding-horizon 在线调度。</p>
+      </div>
+    </div>
+
+    <div class="figure">
+      <svg width="1040" height="250" viewBox="0 0 1040 250" role="img" aria-label="Conceptual bridge from Zhang to Huang to proposed research">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#1e5aa8"></path>
+          </marker>
+        </defs>
+        <rect x="20" y="28" width="285" height="165" rx="8" fill="#eef5ff" stroke="#9ab8dc"></rect>
+        <text x="42" y="60" font-size="18" font-weight="700" fill="#16395f">Zhang et al. 2020</text>
+        <text x="42" y="90" font-size="14" fill="#18212f">Generic JSSP dispatching</text>
+        <text x="42" y="116" font-size="14" fill="#18212f">State: disjunctive graph</text>
+        <text x="42" y="142" font-size="14" fill="#18212f">Action: eligible operation</text>
+        <text x="42" y="168" font-size="14" fill="#18212f">Reward: makespan lower-bound gain</text>
+
+        <line x1="315" y1="110" x2="390" y2="110" stroke="#1e5aa8" stroke-width="3" marker-end="url(#arrow)"></line>
+
+        <rect x="400" y="28" width="285" height="165" rx="8" fill="#effbf7" stroke="#8bc8b5"></rect>
+        <text x="422" y="60" font-size="18" font-weight="700" fill="#0b5a48">Huang et al. 2023</text>
+        <text x="422" y="90" font-size="14" fill="#18212f">Graph AIM to constrained JSSP</text>
+        <text x="422" y="116" font-size="14" fill="#18212f">Adds blocking, deadlock, arrivals</text>
+        <text x="422" y="142" font-size="14" fill="#18212f">Reward: extra vehicle delay</text>
+        <text x="422" y="168" font-size="14" fill="#18212f">Grouping: arrival-time streams</text>
+
+        <line x1="695" y1="110" x2="770" y2="110" stroke="#1e5aa8" stroke-width="3" marker-end="url(#arrow)"></line>
+
+        <rect x="780" y="28" width="240" height="165" rx="8" fill="#fff8ee" stroke="#d9ac78"></rect>
+        <text x="802" y="60" font-size="18" font-weight="700" fill="#8a430b">Your Direction</text>
+        <text x="802" y="90" font-size="14" fill="#18212f">Priority-aware constrained JSSP</text>
+        <text x="802" y="116" font-size="14" fill="#18212f">Weighted and fair delay</text>
+        <text x="802" y="142" font-size="14" fill="#18212f">Trajectory-predicted CZOT</text>
+        <text x="802" y="168" font-size="14" fill="#18212f">Receding-horizon operation</text>
+
+        <text x="75" y="226" font-size="13" fill="#5b6474">Method transfer</text>
+        <text x="448" y="226" font-size="13" fill="#5b6474">Domain adaptation</text>
+        <text x="800" y="226" font-size="13" fill="#5b6474">Research contribution</text>
+      </svg>
+      <div class="caption">Figure 1. The intellectual path: generic JSSP dispatch learning -> constrained AIM scheduling -> priority-aware online AIM.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Paper 1: Zhang et al. 2020 Section-by-Section Review</h2>
+
+    <div class="section-card">
+      <h3>Abstract and Introduction</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>Zhang et al. start from a practical weakness of hand-designed priority dispatching rules. Traditional PDRs are fast and interpretable, but their quality depends on expert design and may not generalize across JSSP instances. The paper proposes to learn dispatching rules end-to-end with reinforcement learning.</p>
+          <p>The central claim is not that RL directly solves JSSP by search. Instead, RL learns a policy that imitates the role of a dispatching rule: at each step, choose the next eligible operation, then schedule it as early as feasible on the corresponding machine.</p>
+        </div>
+        <div class="cn">
+          <p>Zhang et al. 的出发点是传统 priority dispatching rules 的局限。PDR 速度快、好实现，但依赖人工经验，对不同规模和分布的 JSSP 泛化有限。论文用强化学习自动学习 dispatching rule。</p>
+          <p>它不是用 RL 直接做完整搜索，而是让 RL 学一个“下一步选哪个 operation”的规则。选中 operation 后，再把它放到对应 machine 上最早可行的时间位置。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>Related Work</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>The related-work section positions the paper against generic combinatorial optimization learning and older scheduling-learning methods. A key critique is that many earlier approaches use fixed-size feature arrays, image-like states, or manually engineered scheduling features.</p>
+          <p>Zhang's advantage is the disjunctive graph representation: it carries precedence and machine-conflict structure and can be processed by shared GNN parameters, making the policy size-agnostic.</p>
+        </div>
+        <div class="cn">
+          <p>Related Work 主要把论文放在组合优化学习和调度学习文献中比较。作者指出很多旧方法使用固定维度状态、图像式状态，或者人工设计特征，难以自然扩展到不同 job/machine 数量。</p>
+          <p>Zhang 的优势是使用 JSSP 的 disjunctive graph：图里同时包含 job precedence 和 machine conflict。GNN 参数共享后，策略可以处理不同规模的实例。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>Preliminaries: JSSP and Disjunctive Graph</h3>
+      <table>
+        <thead>
+          <tr><th>Concept</th><th>Meaning in Zhang 2020</th><th>Why it matters for AIM</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Job</td><td>A sequence of operations that must follow a fixed order.</td><td>A vehicle follows a fixed route through conflict zones.</td></tr>
+          <tr><td>Machine</td><td>A resource that can process one operation at a time.</td><td>A conflict zone can be occupied by only one vehicle at a time.</td></tr>
+          <tr><td>Conjunctive arcs</td><td>Directed arcs for within-job operation precedence.</td><td>Trajectory-order and same-lane FIFO constraints.</td></tr>
+          <tr><td>Disjunctive arcs</td><td>Undirected arcs between operations sharing a machine.</td><td>Potential conflict-zone ordering decisions.</td></tr>
+          <tr><td>Solution</td><td>Orient disjunctive arcs so the schedule becomes feasible.</td><td>Decide vehicle passing order through shared zones.</td></tr>
+        </tbody>
+      </table>
+      <div class="cn">
+        <p><span class="label cn">中文解释</span>这一节最重要的是图结构。JSSP 的解可以看成“给所有共享 machine 的冲突边定方向”。AIM 中也类似：两个车如果需要同一个 conflict zone，调度器必须决定谁先过。</p>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>Method 4.1: MDP Formulation</h3>
+      <table>
+        <thead>
+          <tr><th>RL component</th><th>Zhang et al. 2020 design</th><th>Interpretation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>State</td><td>Current disjunctive graph with directed assigned arcs and remaining unresolved machine conflicts. Each operation has scheduled indicator and completion lower-bound feature.</td><td>The policy sees both graph structure and partial-schedule timing information.</td></tr>
+          <tr><td>Action</td><td>Choose one eligible operation whose predecessor has already been scheduled.</td><td>The action space changes over time and is bounded by the number of jobs ready to move.</td></tr>
+          <tr><td>Transition</td><td>Place the selected operation at the earliest feasible machine slot and update graph edge directions according to temporal order.</td><td>Action does not directly pick a start time; the environment computes the earliest feasible slot.</td></tr>
+          <tr><td>Reward</td><td>Quality difference between two partial schedules, using a lower bound of makespan.</td><td>Maximizing cumulative reward aligns with minimizing final makespan.</td></tr>
+          <tr><td>Policy</td><td>Stochastic policy over currently eligible operations.</td><td>A learned PDR: it outputs a probability distribution instead of a hand-written priority score.</td></tr>
+        </tbody>
+      </table>
+      <div class="cn">
+        <p><span class="label cn">中文解释</span>Zhang 的 MDP 设计非常适合迁移到你的问题：state 是图，action 是选 operation，transition 由环境安排最早可行时间，reward 体现目标函数变化。你的目标不是 makespan，而是 weighted delay，所以 reward 要相应改成 weighted delay 的增量。</p>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>Method 4.2 and 4.3: GIN Policy and PPO Training</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>The policy uses a Graph Isomorphism Network to embed operation nodes. The graph-level embedding is pooled from node embeddings, and the action score for an eligible operation is computed from its node embedding plus the graph embedding.</p>
+          <p>The actor chooses operations; the critic estimates cumulative reward from the graph embedding. PPO is used as the actor-critic training algorithm. This design is attractive for AIM because intersection instances can vary by number of vehicles, number of conflict zones, and number of unresolved conflicts.</p>
+        </div>
+        <div class="cn">
+          <p>策略网络使用 Graph Isomorphism Network 编码 operation 节点。全局 graph embedding 由节点 embedding pooling 得到；每个候选 action 的分数由该 operation 的节点 embedding 和全局 graph embedding 一起计算。</p>
+          <p>Actor 负责选 operation，critic 用 graph embedding 估计累计 reward。训练算法使用 PPO。这个设计对 AIM 有吸引力，因为不同 horizon 中车辆数、冲突区数、冲突边数都会变化。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>Experiments and Conclusion</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>The experiments compare the learned policy with classical dispatching rules and optimization baselines on generated and benchmark JSSP instances. The important takeaway for this project is generalization: a policy trained on smaller instances can still be useful on larger instances because the GNN policy is not tied to a fixed input size.</p>
+          <p>For your work, this supports training on manageable synthetic traffic groups and testing on larger or denser horizons, while still keeping feasibility checks outside the neural network.</p>
+        </div>
+        <div class="cn">
+          <p>实验部分把 learned policy 和传统 dispatching rules、优化基准比较。对你最有用的结论是泛化能力：由于 GNN 策略不是固定输入维度，较小实例训练出的 policy 可以迁移到更大实例上。</p>
+          <p>对你的项目来说，这支持先用较小 synthetic traffic groups 训练，再测试更大、更密集的 horizon，但安全约束仍然应由环境和可行性检查保证。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3. Paper 2: Huang et al. 2023 Section-by-Section Review</h2>
+
+    <div class="section-card huang">
+      <h3>Abstract and Introduction</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>Huang et al. propose a centralized RL-based intersection manager. The paper defines graph-based intersection scheduling, transforms it into constrained JSSP, models the scheduling process as an MDP, trains with PPO, and uses grouping to handle vehicle streams.</p>
+          <p>The paper's core motivation is that graph-based intersection scheduling can flexibly represent different conflict scenarios, but the scheduling problem becomes hard under dense traffic. Learning a dispatching policy can help when simple greedy rules become weak.</p>
+        </div>
+        <div class="cn">
+          <p>Huang et al. 提出一个 centralized RL-based intersection manager。论文把 graph-based intersection scheduling 转成 constrained JSSP，用 MDP 表示调度过程，用 PPO 训练，并通过 grouping 处理连续车辆流。</p>
+          <p>核心动机是 graph-based intersection model 可以表达各种冲突场景，但高密度交通下调度变难。学习型 dispatching policy 在冲突密集时可能比简单 greedy 更有效。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card huang">
+      <h3>Background: Graph-Based AIM and JSSP</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>The graph-based AIM model divides an intersection into conflict zones. A vertex represents a vehicle-conflict-zone pair, and edges describe timing relationships. If the passing orders are safe and deadlock-free, collision-freeness follows from one-vehicle-per-zone occupation.</p>
+          <p>The JSSP background gives the mapping: vehicle as job, conflict zone as machine, zone traversal as operation, and traversal time as processing time.</p>
+        </div>
+        <div class="cn">
+          <p>Graph-based AIM 把交叉口划分成 conflict zones。图节点可以理解为 vehicle-conflict-zone pair，边表示 timing relationship。只要 passing order 满足安全和 deadlock-free，冲突区同一时刻只允许一辆车就能保证 collision-free。</p>
+          <p>JSSP 背景给出了映射：vehicle 是 job，conflict zone 是 machine，穿过某个 zone 是 operation，穿越时间是 processing time。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card huang">
+      <h3>Approach A: Problem Statement</h3>
+      <table>
+        <thead>
+          <tr><th>Huang component</th><th>Meaning</th><th>Extension opportunity</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Intersection tuple</td><td>An intersection is represented by conflict zones and feasible trajectories.</td><td>Add zone granularity study and data-driven conflict-zone occupation time.</td></tr>
+          <tr><td>Vehicle tuple</td><td>Vehicle includes earliest arrival time and trajectory.</td><td>Add class, priority weight, length, and motion features.</td></tr>
+          <tr><td>Blocking constraint</td><td>A vehicle cannot be removed from its current physical zone while waiting.</td><td>Use buffer zones or conservative release rules in the first simulator.</td></tr>
+          <tr><td>Deadlock constraint</td><td>Actions that create circular waiting must be excluded.</td><td>Implement graph cycle check as an action mask.</td></tr>
+          <tr><td>Arrival constraint</td><td>Operations cannot start before vehicle arrival.</td><td>Use predicted arrivals and test noise robustness.</td></tr>
+          <tr><td>Objective</td><td>Minimize total vehicle delay rather than only makespan.</td><td>Replace with weighted/fair delay for heterogeneous vehicles.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-card huang">
+      <h3>Approach B: RL-Based Methodology</h3>
+      <table>
+        <thead>
+          <tr><th>RL component</th><th>Huang et al. 2023 design</th><th>How to adapt for your project</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>State</td><td>Current graph/JSSP representation of the partial solution. Operation features include scheduled status and earliest completion information.</td><td>Add vehicle class, priority weight, predicted arrival uncertainty, and resource occupancy/blocking features.</td></tr>
+          <tr><td>Action</td><td>Choose a possible operation from the current action set.</td><td>Mask actions violating trajectory precedence, same-lane FIFO, release time, blocking, deadlock, and safety headway.</td></tr>
+          <tr><td>Transition</td><td>Assign the selected operation the earliest possible start time and update graph temporal relations.</td><td>Use predicted conflict-zone occupation times and re-plan under receding horizon.</td></tr>
+          <tr><td>Reward</td><td>Extra delay introduced by the selected action.</td><td>Use negative incremental weighted delay, with fairness/stability penalties as optional terms.</td></tr>
+          <tr><td>Policy/training</td><td>Graph neural policy trained with PPO.</td><td>Start with baselines; add PPO/GNN after the feasibility checker is reliable.</td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        <strong>Important safety reading:</strong> Huang's action space is already constrained. For your work, the learned policy should never be the safety authority. The environment should expose only feasible actions or reject unsafe actions before scheduling.
+      </div>
+    </div>
+
+    <div class="section-card huang">
+      <h3>Approach C: Grouping Strategy</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>Because vehicles arrive as a stream, Huang groups vehicles according to arrival times and applies a trained model group by group. This addresses two problems: PPO training becomes harder with larger groups, and real traffic is not one fixed static JSSP instance.</p>
+          <p>For your project, grouping should be treated as a form of receding-horizon construction. The group can be defined by arrival-time clusters, a fixed prediction horizon, or a maximum active-vehicle count.</p>
+        </div>
+        <div class="cn">
+          <p>由于车辆连续到达，Huang 根据 arrival time 对车辆分组，然后逐组应用训练好的模型。这解决两个问题：大 group 训练更慢更难；真实交通也不是一次性静态 JSSP。</p>
+          <p>在你的项目里，grouping 可以看成 receding-horizon construction 的一种形式。分组可以基于 arrival-time clusters、固定预测窗口，或者最大 active vehicle 数量。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card huang">
+      <h3>Experiments and Conclusion</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>Huang evaluates different intersection structures, traffic densities, and group sizes, comparing PPO with improved greedy and small-instance optimal solutions. The key observation is density-dependent: PPO tends to be more useful under high traffic density, while iGreedy can be strong when density is low.</p>
+          <p>This directly motivates a hybrid strategy in your thesis: use simple safe heuristics under sparse traffic and switch to learned or optimization-aided dispatching under high contention.</p>
+        </div>
+        <div class="cn">
+          <p>Huang 的实验比较不同交叉口结构、交通密度和 group size，并将 PPO 与 iGreedy、optimal solutions 比较。关键发现是和密度有关：高密度时 PPO 更有优势，低密度时 iGreedy 可能已经很强。</p>
+          <p>这直接支持你的 hybrid strategy：低冲突时使用安全、简单的 heuristic；高冲突时切换到 learning-based 或 optimization-aided dispatching。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. Direct Comparison: Zhang vs Huang vs Your Research</h2>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Zhang et al. 2020</th><th>Huang et al. 2023</th><th>Your priority-aware AIM direction</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Domain</td><td>Generic manufacturing-style JSSP.</td><td>Single-intersection AIM mapped to constrained JSSP.</td><td>Heterogeneous CAV intersection scheduling.</td></tr>
+        <tr><td>State/observation</td><td>Disjunctive graph, scheduled indicator, completion lower bound.</td><td>Graph/JSSP partial schedule for vehicle-zone operations.</td><td>Graph state plus vehicle class, priority, prediction, occupancy, and blocking features.</td></tr>
+        <tr><td>Action</td><td>Select eligible operation.</td><td>Select feasible operation under traffic constraints.</td><td>Select masked feasible vehicle-zone operation or vehicle dispatch decision.</td></tr>
+        <tr><td>Reward/objective</td><td>Improvement in makespan lower-bound quality.</td><td>Extra delay introduced by action; total delay objective.</td><td>Negative incremental weighted delay plus optional fairness/stability penalties.</td></tr>
+        <tr><td>Safety</td><td>Standard JSSP machine capacity and precedence feasibility.</td><td>Blocking, deadlock, arrival constraints added to JSSP.</td><td>Safety masks, headway margins, deadlock checks, same-lane FIFO, and commitment windows.</td></tr>
+        <tr><td>Stream handling</td><td>Mostly static JSSP instances.</td><td>Arrival-time grouping for vehicle streams.</td><td>Receding-horizon grouping with prediction-noise robustness.</td></tr>
+        <tr><td>Gap</td><td>No traffic-specific priority or physical intersection constraints.</td><td>No full heterogeneous priority/fairness formulation.</td><td>Combine priority-aware objective, physical heterogeneity, prediction, and online scheduling.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>5. Visual Map for Your Project</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Existing repository concept map</h3>
+        <img src="../Pic/PriorityAwareJSSPAIMMindMap.png" alt="Priority-aware JSSP AIM mind map">
+        <div class="caption">Local image: priority-aware data-driven JSSP for AIM concept map.</div>
+      </div>
+      <div class="card">
+        <h3>Existing JSSP/RL sketch</h3>
+        <img src="../Pic/RLJSSPPrePaper.png" alt="JSSP RL previous paper sketch">
+        <div class="caption">Local image: sketch connecting the previous JSSP-RL paper to traffic scheduling.</div>
+      </div>
+    </div>
+
+    <div class="figure">
+      <svg width="1040" height="310" viewBox="0 0 1040 310" role="img" aria-label="Priority-aware JSSP AIM pipeline">
+        <defs>
+          <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#0b6b57"></path>
+          </marker>
+        </defs>
+        <rect x="22" y="38" width="160" height="82" rx="8" fill="#eef5ff" stroke="#9ab8dc"></rect>
+        <text x="42" y="70" font-size="15" font-weight="700">Vehicle stream</text>
+        <text x="42" y="96" font-size="13">class, lane, speed</text>
+
+        <line x1="190" y1="79" x2="244" y2="79" stroke="#0b6b57" stroke-width="3" marker-end="url(#arrow2)"></line>
+        <rect x="252" y="38" width="170" height="82" rx="8" fill="#effbf7" stroke="#8bc8b5"></rect>
+        <text x="272" y="70" font-size="15" font-weight="700">Prediction</text>
+        <text x="272" y="96" font-size="13">arrival, trajectory, CZOT</text>
+
+        <line x1="430" y1="79" x2="484" y2="79" stroke="#0b6b57" stroke-width="3" marker-end="url(#arrow2)"></line>
+        <rect x="492" y="38" width="176" height="82" rx="8" fill="#fff8ee" stroke="#d9ac78"></rect>
+        <text x="512" y="70" font-size="15" font-weight="700">Constrained JSSP</text>
+        <text x="512" y="96" font-size="13">zones, jobs, constraints</text>
+
+        <line x1="676" y1="79" x2="730" y2="79" stroke="#0b6b57" stroke-width="3" marker-end="url(#arrow2)"></line>
+        <rect x="738" y="38" width="132" height="82" rx="8" fill="#fff1f1" stroke="#d69a9a"></rect>
+        <text x="758" y="70" font-size="15" font-weight="700">Scheduler</text>
+        <text x="758" y="96" font-size="13">FCFS/greedy/PPO</text>
+
+        <line x1="878" y1="79" x2="932" y2="79" stroke="#0b6b57" stroke-width="3" marker-end="url(#arrow2)"></line>
+        <rect x="940" y="38" width="78" height="82" rx="8" fill="#f8f9fc" stroke="#b8c0cf"></rect>
+        <text x="953" y="70" font-size="15" font-weight="700">Execute</text>
+        <text x="953" y="96" font-size="13">near term</text>
+
+        <path d="M980 130 C950 230, 260 235, 112 130" fill="none" stroke="#5b6474" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow2)"></path>
+        <text x="420" y="245" font-size="14" fill="#5b6474">re-plan with updated observations and fixed commitment window</text>
+
+        <rect x="80" y="165" width="240" height="52" rx="6" fill="#ffffff" stroke="#d7dde8"></rect>
+        <text x="96" y="197" font-size="13">Safety: masks, headways, deadlock check</text>
+        <rect x="396" y="165" width="240" height="52" rx="6" fill="#ffffff" stroke="#d7dde8"></rect>
+        <text x="412" y="197" font-size="13">Objective: weighted delay + fairness</text>
+        <rect x="712" y="165" width="240" height="52" rx="6" fill="#ffffff" stroke="#d7dde8"></rect>
+        <text x="728" y="197" font-size="13">Evaluation: delay, class delay, runtime</text>
+      </svg>
+      <div class="caption">Figure 2. Proposed online priority-aware JSSP-AIM pipeline.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. Research Gap and Problem Formulation</h2>
+    <div class="section-card gap">
+      <h3>Gap statement</h3>
+      <div class="bilingual">
+        <div class="en">
+          <p>Existing work links graph-based intersection management, JSSP, and PPO, but does not fully combine heterogeneous vehicle priority, weighted/fair delay, trajectory-predicted conflict-zone occupation time, and online receding-horizon execution.</p>
+          <p>A precise research problem is: how can a single CAV intersection be formulated as a priority-aware constrained JSSP whose dispatching actions are safety-masked, whose objective minimizes weighted delay without starvation, and whose online schedule is updated from predicted arrivals and zone occupation times?</p>
+        </div>
+        <div class="cn">
+          <p>现有工作已经把 graph-based intersection management、JSSP 和 PPO 联系起来，但还没有系统整合异构车辆优先级、weighted/fair delay、基于轨迹预测的冲突区占用时间，以及在线 receding-horizon execution。</p>
+          <p>更精确的研究问题是：如何把单个 CAV 交叉口建模为 priority-aware constrained JSSP，使 dispatching action 经过安全 mask，目标函数最小化 weighted delay 且避免 starvation，并根据预测 arrival 和 zone occupation time 在线更新调度？</p>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Research question</th><th>Technical answer to develop</th><th>First validation</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>How should priority enter the scheduler?</td><td>Weighted delay for buses/person-delay, physical processing/headway for trucks, hard or high-weight emergency priority.</td><td>Compare equal-priority vs weighted-priority scenarios.</td></tr>
+        <tr><td>How can safety be preserved with RL?</td><td>Use feasibility masks and graph deadlock checks before action selection or commitment.</td><td>Zero collisions and zero deadlocks in all simulated runs.</td></tr>
+        <tr><td>When is PPO actually useful?</td><td>Test density-dependent performance and hybrid switching.</td><td>Low/medium/high traffic density experiments.</td></tr>
+        <tr><td>How should continuous streams be handled?</td><td>Arrival-time grouping plus receding-horizon commitment windows.</td><td>Compare fixed group size, arrival clusters, and horizon windows.</td></tr>
+        <tr><td>How robust is prediction-based scheduling?</td><td>Add margins and re-plan frequently under noisy arrival/CZOT estimates.</td><td>Noisy prediction stress tests.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>7. Suggested Technical Roadmap / 技术路线</h2>
+    <table>
+      <thead>
+        <tr><th>Stage</th><th>English plan</th><th>中文计划</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Define one four-way conflict-zone graph and synthetic vehicle generator.</td><td>先定义一个四向交叉口冲突区图，并生成 synthetic vehicle stream。</td></tr>
+        <tr><td>2</td><td>Implement feasibility checker: release time, zone capacity, FIFO, blocking, deadlock.</td><td>实现可行性检查：arrival/release、zone capacity、same-lane FIFO、blocking、deadlock。</td></tr>
+        <tr><td>3</td><td>Implement FCFS, greedy, priority-greedy, and deadlock-aware greedy.</td><td>先做 FCFS、greedy、priority-greedy、deadlock-aware greedy，不要急着训练 RL。</td></tr>
+        <tr><td>4</td><td>Add small-instance CP-SAT or MILP benchmark for optimality-gap checking.</td><td>小规模实例加入 CP-SAT/MILP benchmark，用来验证 heuristic 和 RL 的 gap。</td></tr>
+        <tr><td>5</td><td>Add receding-horizon grouping and prediction-noise experiments.</td><td>加入 rolling/receding horizon、arrival grouping 和 prediction noise 鲁棒性测试。</td></tr>
+        <tr><td>6</td><td>Add PPO/GNN after baselines and constraint checks are reliable.</td><td>等 baseline 和安全检查稳定后，再加入 PPO/GNN policy。</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>8. Short Takeaway / 一句话结论</h2>
+    <div class="bilingual">
+      <div class="en">
+        <p>Zhang teaches how to learn graph-based JSSP dispatching; Huang teaches how to transform graph-based AIM into constrained JSSP and use PPO with arrival grouping. Your strongest next contribution is not just "using RL", but designing a priority-aware, safety-masked, receding-horizon constrained JSSP framework for heterogeneous CAV intersections.</p>
+      </div>
+      <div class="cn">
+        <p>Zhang 告诉我们如何学习 graph-based JSSP dispatching；Huang 告诉我们如何把 graph-based AIM 转成 constrained JSSP 并用 PPO 和 arrival grouping。你的最强贡献不是单纯“用 RL”，而是设计一个面向异构 CAV 的 priority-aware、safety-masked、receding-horizon constrained JSSP 框架。</p>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

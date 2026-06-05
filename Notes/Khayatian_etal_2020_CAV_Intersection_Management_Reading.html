@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Khayatian et al. 2020 CAV Intersection Management Reading Notes</title>
+  <style>
+    :root {
+      --bg: #f6f7f4;
+      --paper: #fffdf8;
+      --ink: #1f2933;
+      --muted: #667085;
+      --line: #d8ddd2;
+      --green: #3f7d58;
+      --blue: #2f6690;
+      --amber: #b56b18;
+      --red: #a94442;
+      --violet: #6b5b95;
+      --soft-green: #e8f2ea;
+      --soft-blue: #e8f0f7;
+      --soft-amber: #fff3df;
+      --soft-red: #f8e8e8;
+      --soft-violet: #f0edf7;
+      --shadow: 0 10px 30px rgba(31, 41, 51, 0.08);
+      --radius: 8px;
+      font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(230px, 280px) minmax(0, 1fr);
+      gap: 24px;
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 18px;
+      height: calc(100vh - 36px);
+      overflow: auto;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 248, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.3;
+      color: var(--green);
+    }
+
+    .subtitle {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .nav-title {
+      margin: 18px 0 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 7px 9px;
+      border-radius: 6px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .nav-list a:hover {
+      background: var(--soft-blue);
+      text-decoration: none;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 980px;
+      font-size: 34px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .hero-lead {
+      max-width: 980px;
+      margin: 16px 0 0;
+      color: #394451;
+      font-size: 17px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .meta-item {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf5;
+    }
+
+    .meta-label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .meta-value {
+      display: block;
+      margin-top: 3px;
+      font-weight: 700;
+    }
+
+    .quick-map {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .note-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .note-card h2,
+    .note-card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .note-card p {
+      margin: 0 0 10px;
+    }
+
+    .paper-section {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      scroll-margin-top: 16px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+    }
+
+    .kicker {
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .section-tag {
+      flex: 0 0 auto;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: var(--soft-green);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .reading-grid {
+      display: grid;
+      grid-template-columns: minmax(320px, 0.94fr) minmax(0, 1.06fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .source-pane,
+    .notes-pane {
+      min-width: 0;
+    }
+
+    .source-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .source-box img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+    }
+
+    .source-caption {
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .anchor-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius);
+      background: var(--soft-blue);
+      font-size: 14px;
+    }
+
+    .anchor-box strong {
+      color: var(--blue);
+    }
+
+    .cn-title {
+      margin: 0 0 8px;
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .notes-pane p {
+      margin: 0 0 12px;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .summary-list li {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .annotation {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border: 1px solid #ecd8b8;
+      border-left: 4px solid var(--amber);
+      border-radius: var(--radius);
+      background: var(--soft-amber);
+    }
+
+    .annotation.danger {
+      border-color: #e7bebe;
+      border-left-color: var(--red);
+      background: var(--soft-red);
+    }
+
+    .annotation.research {
+      border-color: #d4cdeb;
+      border-left-color: var(--violet);
+      background: var(--soft-violet);
+    }
+
+    .annotation strong {
+      color: #74460f;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      font-size: 14px;
+    }
+
+    .mini-table th,
+    .mini-table td {
+      padding: 10px;
+      border: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .mini-table th {
+      background: var(--soft-green);
+      color: #274b35;
+    }
+
+    .term-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .term {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .term strong {
+      display: block;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    .top-link {
+      display: inline-block;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    code {
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #eef1f4;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.94em;
+    }
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+
+      .nav-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .reading-grid,
+      .quick-map,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .layout {
+        padding: 12px;
+      }
+
+      .hero,
+      .paper-section {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      h2 {
+        font-size: 21px;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-tag {
+        display: inline-block;
+        margin-top: 10px;
+      }
+
+      .nav-list,
+      .term-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout" id="top">
+    <aside class="sidebar" aria-label="章节导航">
+      <h2 class="brand">Khayatian 2020 精读</h2>
+      <p class="subtitle">中英文定位 + 中文解读 + JSSP/AIM 研究批注</p>
+      <div class="nav-title">阅读入口</div>
+      <ul class="nav-list">
+        <li><a href="#overview">总览</a></li>
+        <li><a href="#terms">术语速查</a></li>
+      </ul>
+      <div class="nav-title">论文章节</div>
+      <ul class="nav-list">
+        <li><a href="#sec1">1 Introduction</a></li>
+        <li><a href="#sec2">2 V2I/V2V Interface</a></li>
+        <li><a href="#sec3">3 Vehicle Dynamics</a></li>
+        <li><a href="#sec4">4 Conflict Detection</a></li>
+        <li><a href="#sec5">5 Scheduling Policy</a></li>
+        <li><a href="#sec6">6 Wireless Technology</a></li>
+        <li><a href="#sec7">7 Multiple Intersections</a></li>
+        <li><a href="#sec8">8 Hybrid Intersections</a></li>
+        <li><a href="#sec9">9 Safety and Robustness</a></li>
+        <li><a href="#sec10">10 Recovery</a></li>
+        <li><a href="#sec11">11 Security</a></li>
+        <li><a href="#sec12">12 Evaluation</a></li>
+        <li><a href="#sec13">13 Conclusion</a></li>
+        <li><a href="#sec14">14 Tail Notes</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section class="hero" id="overview">
+        <h1>A Survey on Intersection Management of Connected Autonomous Vehicles</h1>
+        <p class="hero-lead">
+          这份 HTML 是对 Khayatian et al. 2020 survey 的章节精读。重点不是逐句翻译，而是把文章的分类框架、关键概念、部署挑战和你当前的 priority-aware JSSP/AIM 研究方向连接起来。
+        </p>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Paper</span>
+            <span class="meta-value">Khayatian et al., 2020</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Local PDF</span>
+            <span class="meta-value"><a href="../RelatedPaper/Khayatian_etal_2020_Survey_CAV_Intersection_Management.pdf">RelatedPaper PDF</a></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Pages</span>
+            <span class="meta-value">27 pages</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">阅读目标</span>
+            <span class="meta-value">为 JSSP/AIM 选题找定位</span>
+          </div>
+        </div>
+
+        <div class="quick-map">
+          <div class="note-card">
+            <h2>一眼读懂</h2>
+            <p>
+              这篇文章把 connected autonomous vehicles at intersections 的研究拆成接口、车辆模型、冲突检测、调度策略、通信、安全、混合交通、恢复、网络安全和评估方法等维度。它的价值在于给 AIM 研究提供了一张“部署前必须考虑什么”的清单。
+            </p>
+            <p>
+              对你的研究来说，最重要的是第 4 节 conflict detection、第 5 节 scheduling policy、第 9 节 safety/robustness 和第 13 节 future work。它们能支撑你的论文把 JSSP/RL 方法放在“调度层”，同时明确安全、通信、车辆动力学属于约束或假设边界。
+            </p>
+          </div>
+          <div class="note-card">
+            <h2>建议阅读顺序</h2>
+            <ul class="summary-list">
+              <li>先读 Fig. 1，把 survey scope 和你的 AIM 研究范围对齐。</li>
+              <li>再读第 2、4、5 节：接口决定信息流，冲突检测决定资源模型，调度策略决定优化目标。</li>
+              <li>最后读第 9-13 节：它们解释为什么真实部署很难，也给你的 future work 和 limitations 提供语言。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="paper-section" id="terms">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Glossary</p>
+            <h2>术语速查</h2>
+          </div>
+          <span class="section-tag">阅读辅助</span>
+        </div>
+        <div class="term-grid">
+          <div class="term"><strong>CAV</strong>Connected Autonomous Vehicle，能通信也能自动驾驶的车辆。</div>
+          <div class="term"><strong>IM</strong>Intersection Manager，集中式 AIM 里的路侧/边缘调度器。</div>
+          <div class="term"><strong>V2V / V2I</strong>车车通信 / 车路通信，决定谁掌握状态、谁做决策。</div>
+          <div class="term"><strong>QB-IM</strong>Query-based IM，车辆提出通行请求，IM 接受或拒绝。</div>
+          <div class="term"><strong>AB-IM</strong>Assignment-based IM，车辆上报状态，IM 直接分配通行时间或轨迹。</div>
+          <div class="term"><strong>Occupancy Map</strong>把交叉口离散成空间-时间格子，检查两个车辆是否占用同一格。</div>
+          <div class="term"><strong>Trajectory-based Conflict</strong>用预定义路径和冲突点判断车辆轨迹是否在同一时段相交。</div>
+          <div class="term"><strong>FCFS</strong>First-Come First-Served，先到先服务，公平但不一定高效。</div>
+          <div class="term"><strong>WCET</strong>Worst-case Execution Time，调度算法最坏执行时间，关系到安全缓冲和通信距离。</div>
+        </div>
+      </section>
+
+      <section class="paper-section" id="sec1">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 1</p>
+            <h2>Introduction</h2>
+          </div>
+          <span class="section-tag">研究范围</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/fig01_survey_scope.png" alt="Fig. 1 survey scope">
+              <figcaption class="source-caption">Fig. 1: survey scope，把 CAV intersection management 放进 ITS 研究版图。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 1-3, Section 1, Fig. 1. 核心定位是 signal-free CAV intersection management。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              引言先说明 ITS 和 CAV 的潜力，然后把研究范围收窄到“无信号交叉口的 CAV 管理”。文章不是提出一个新算法，而是把已有 122 篇相关工作按实际部署需要重新分类。
+            </p>
+            <ul class="summary-list">
+              <li>交叉口事故占比高，因此 CAV 如果能通过通信预约通行时间，理论上可以减少等待、油耗和人为错误导致的事故。</li>
+              <li>作者认为之前 survey 要么偏调度策略，要么非技术性；本文希望从接口、通信、车辆模型、安全、恢复和评估等多角度补齐。</li>
+              <li>这篇 survey 的核心问题是：一个交叉口管理算法要真正部署，需要满足哪些系统级条件。</li>
+            </ul>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              你的研究可以引用这篇作为 AIM 大背景，而不是直接方法基线。它证明“调度策略”只是 AIM 系统的一层，后续论文里要清楚声明：你的贡献聚焦在 priority-aware scheduling layer，低层控制、通信和安全验证作为约束或假设处理。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec2">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 2</p>
+            <h2>V2I/V2V Interface for Intersection Management</h2>
+          </div>
+          <span class="section-tag">信息流</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/fig02_interfaces.png" alt="Fig. 2 centralized and decentralized interface">
+              <figcaption class="source-caption">Fig. 2: 集中式接口 vs 分布式接口。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 3-7, Section 2, Table 1. 关键词：Distributed, Centralized, QB-IM, AB-IM。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              第 2 节回答“谁来做调度、车辆交换什么信息”。分布式方案由车辆彼此通信并协商；集中式方案由路侧 IM 收集车辆状态后给出通行安排。集中式又分成 query-based 和 assignment-based。
+            </p>
+            <table class="mini-table">
+              <thead>
+                <tr><th>类别</th><th>中文解释</th><th>主要取舍</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Distributed</td><td>车辆之间共享位置、速度、路径、到达时间等信息，自行协商。</td><td>基础设施依赖低，但广播开销和一致性问题更突出。</td></tr>
+                <tr><td>QB-IM</td><td>车辆向 IM 提出通行方案，IM 只回答接受或拒绝。</td><td>IM 计算较轻，但车辆可能反复请求，吞吐下降。</td></tr>
+                <tr><td>AB-IM</td><td>车辆上报状态，IM 分配通行时间、速度或轨迹。</td><td>吞吐可能更高，但 IM 计算压力更大，也是单点故障。</td></tr>
+              </tbody>
+            </table>
+            <ul class="summary-list">
+              <li>接口设计会影响网络开销、可扩展性、实时性和故障模式。</li>
+              <li>分布式方法更像“车辆协商”，集中式方法更像“边缘调度器统一派单”。</li>
+              <li>几乎所有方法都需要时间同步，否则通行预约的时刻含义不一致，安全性无法保证。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              QB-IM 和 AB-IM 的差别不是“有没有 IM”，而是 IM 的权力大小。QB-IM 是审核车辆的提案，AB-IM 是 IM 主动生成方案。JSSP 调度更接近 AB-IM，因为调度器需要直接决定资源占用顺序和开始时间。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              你的模型默认可以设成 centralized AB-IM：车辆上报路线、到达时间、类别和权重，IM 在滚动时域内解 priority-aware constrained JSSP。这样接口和优化问题是一致的。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec3">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 3</p>
+            <h2>Vehicle Dynamics</h2>
+          </div>
+          <span class="section-tag">车辆模型</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/fig03_vehicle_dynamics.png" alt="Fig. 3 vehicle dynamics models">
+              <figcaption class="source-caption">Fig. 3: 从一维双积分模型到更高保真车辆模型。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 7-9, Section 3, Table 2. 关键词：double integrator, 4-wheel, bicycle model, high-fidelity。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              车辆动力学模型用于预测车辆未来轨迹和冲突区占用时间。模型越简单，越适合实时调度；模型越精细，越接近真实车辆行为，但计算成本和参数估计难度也更高。
+            </p>
+            <table class="mini-table">
+              <thead>
+                <tr><th>模型</th><th>适合回答的问题</th><th>局限</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1D double integrator</td><td>车辆沿路线前进的速度/加速度约束。</td><td>忽略转向和横向运动。</td></tr>
+                <tr><td>4-wheel / bicycle</td><td>考虑转向、航向角和二维运动。</td><td>比 1D 更复杂，在线计算压力更大。</td></tr>
+                <tr><td>High-fidelity</td><td>考虑坡度、空气阻力、质量等因素。</td><td>需要在线识别参数，否则可能反而脆弱。</td></tr>
+              </tbody>
+            </table>
+            <ul class="summary-list">
+              <li>低层动力学影响“车辆能不能按调度时间到达/离开冲突区”。</li>
+              <li>如果模型误差大，调度器必须增加安全缓冲，这会降低吞吐。</li>
+              <li>论文强调固定模型可能导致 brittle system，因此实际部署需要鲁棒或自适应设计。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              对调度论文来说，不一定要自己解决完整车辆控制。可以把动力学压缩成 release time、processing time、minimum headway 和 feasible speed bounds。关键是说明这些量如何从轨迹预测或车辆模型得到。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              你的 JSSP 里的 processing time 不应写成纯常数。它可以由车辆类型、长度、速度、转向动作和安全缓冲估计得到。公交、货车、急救车不仅有权重差异，也可能有不同的占用时间。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec4">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 4</p>
+            <h2>Conflict Detection</h2>
+          </div>
+          <span class="section-tag">资源冲突</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/fig04_conflict_detection.png" alt="Fig. 4 conflict detection models">
+              <figcaption class="source-caption">Fig. 4: occupancy map 与 trajectory-based conflict detection。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF p. 9, Section 4, Table 3. 关键词：spatio-temporal occupancy map, expected trajectories。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              冲突检测是 AIM 能转化成调度问题的关键。文章把方法分成两类：一种是把交叉口离散成空间-时间占用格，另一种是根据预定义车辆轨迹和冲突点判断是否会同时相交。
+            </p>
+            <table class="mini-table">
+              <thead>
+                <tr><th>冲突模型</th><th>中文解释</th><th>对调度的影响</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Occupancy map</td><td>车辆在某时刻占据哪些格子，两个车辆不能同时占同一格。</td><td>容易检查，但格子越细、时间步越小，计算越重。</td></tr>
+                <tr><td>Trajectory-based</td><td>预先知道直行/左转/右转轨迹，找路径交叉点和时间重叠。</td><td>更紧凑，适合转成 conflict zone/resource 图。</td></tr>
+              </tbody>
+            </table>
+            <ul class="summary-list">
+              <li>occupancy map 的优势是布尔检查简单，缺点是粒度决定吞吐和计算量。</li>
+              <li>trajectory-based 方法不必存整张占用图，但依赖轨迹集合和冲突点预定义。</li>
+              <li>冲突检测方法直接决定调度模型里的“机器/资源”如何定义。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              如果把整个交叉口看成一个资源，安全容易但吞吐低；如果把交叉口切成很多 conflict zones，吞吐高但调度复杂。JSSP 模型的价值正是在细粒度资源下处理顺序约束和资源冲突。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              这一节是你的 JSSP 映射基础：vehicle = job，conflict zone = machine，trajectory = operation sequence。priority-aware 目标只是在这个安全资源模型上决定谁先占用资源，不能替代冲突检测本身。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec5">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 5</p>
+            <h2>Scheduling Policy</h2>
+          </div>
+          <span class="section-tag">核心方法</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/fig05_scheduling_policy.png" alt="Fig. 5 scheduling policy comparison">
+              <figcaption class="source-caption">Fig. 5: FCFS、optimization-based、heuristic 三类调度策略。</figcaption>
+            </figure>
+            <figure class="source-box" style="margin-top: 12px;">
+              <img src="Khayatian_etal_2020_assets/table04_scheduling_policy.png" alt="Table 4 scheduling policy categories">
+              <figcaption class="source-caption">Table 4: 文献按调度策略分类。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 10-13, Section 5. 关键词：FCFS, optimization-based, heuristic, fairness, throughput。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              第 5 节是与你的研究最直接相关的部分。文章把交叉口调度策略分为三类：先到先服务、优化求解、启发式规则。核心矛盾是公平性、平均等待时间、吞吐量和计算时间之间的权衡。
+            </p>
+            <table class="mini-table">
+              <thead>
+                <tr><th>策略</th><th>优点</th><th>缺点</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>FCFS</td><td>公平、容易解释、实现简单。</td><td>高密度下效率差，可能错过非冲突车辆并行通行机会。</td></tr>
+                <tr><td>Optimization-based</td><td>能显式优化总等待、能耗、舒适度等目标。</td><td>求解时间随车辆数和冲突复杂度快速增加。</td></tr>
+                <tr><td>Heuristic</td><td>计算轻，能在公平和效率之间做折中。</td><td>通常没有全局最优保证，需要大量场景验证。</td></tr>
+              </tbody>
+            </table>
+            <ul class="summary-list">
+              <li>FCFS 满足直觉公平，但不等于系统效率最优。</li>
+              <li>优化方法可以提高吞吐，但最坏计算时间会影响安全缓冲和通信范围。</li>
+              <li>启发式方法的价值在于实时性和 bounded delay，但需要明确规则和失败场景。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              “公平”不是简单等于 FCFS。priority-aware scheduling 会故意偏离 FCFS，所以必须定义可接受的公平边界，例如最大等待时间、年龄增长权重或普通车辆不被长期饿死的约束。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              你的方法可以定位成 optimization-aware heuristic / RL dispatching：目标不是只求最优，而是在在线滚动时域中学习或构造一个安全、可解释、带权重的调度策略。论文里应同时比较 FCFS、greedy、priority-greedy、MILP/CP-SAT 小规模最优和 RL。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec6">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 6</p>
+            <h2>Wireless Technology</h2>
+          </div>
+          <span class="section-tag">通信约束</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/table05_dsrc_cv2x.png" alt="Table 5 DSRC and C-V2X comparison">
+              <figcaption class="source-caption">Table 5: DSRC 与 C-V2X 的优缺点对比。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 13-14, Section 6. 关键词：DSRC, C-V2X, latency, range, message rate。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              这一节提醒读者：调度算法不能假设信息瞬间到达。交叉口调度依赖低延迟、高可靠的信息交换，通信范围和数据包数量会限制交叉口能同时管理多少车辆。
+            </p>
+            <ul class="summary-list">
+              <li>DSRC 有硬件和标准基础，但广播方式在高密度环境下可能变得低效。</li>
+              <li>C-V2X 支持更长距离和点对点通信，但在文章写作时硬件支持仍有限。</li>
+              <li>通信延迟决定车辆需要多早进入控制区，也决定调度安全缓冲大小。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              通信不是“系统实现细节”，它会反过来改变调度问题。如果消息延迟大，车辆必须更早提交请求，滚动时域长度要变长，安全间隔也要变大。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              第一阶段可以把通信设为 bounded delay assumption。后续实验可以用 delay/noise robustness test：到达时间预测误差、车辆状态丢包、延迟反馈对 weighted delay 和安全可行率的影响。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec7">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 7</p>
+            <h2>Managing Multiple Intersections</h2>
+          </div>
+          <span class="section-tag">网络扩展</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 14-15, Section 7. 关键词：grid of intersections, routing, congestion, granularity。
+            </div>
+            <div class="note-card">
+              <h3>英文定位</h3>
+              <p>本节从单交叉口转向城市路网或多交叉口网格，关注 route choice、congestion checking 和相邻路口协调。</p>
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              多路口管理把问题从“一个交叉口内部的通行顺序”扩展为“车辆在路网中的路径与多个交叉口预约”。单路口可用细粒度车辆级模型，多路口则经常需要更粗粒度的流量或路径层模型。
+            </p>
+            <ul class="summary-list">
+              <li>细粒度车辆级多路口管理计算量很大，尤其当每个路口都保留空间-时间资源。</li>
+              <li>粗粒度流量模型计算更轻，但对个体车辆安全和具体冲突区占用描述不足。</li>
+              <li>多路口还会引入 route planning 与 local scheduling 的耦合。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              多路口问题不只是把单路口复制多次。一个路口的调度会改变车辆到达下一个路口的时间，因此调度和路径规划会互相影响。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              建议 thesis 第一阶段聚焦 single intersection。可以在 future work 写 multi-intersection extension：每个路口内部仍是 constrained JSSP，路口之间用 rolling horizon 或 corridor-level coordination 传递 predicted arrival windows。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec8">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 8</p>
+            <h2>Hybrid Human-CAV Intersections</h2>
+          </div>
+          <span class="section-tag">混合交通</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 15-16, Section 8. 关键词：human-driven vehicles, pedestrians, traffic lights, onboard devices。
+            </div>
+            <div class="note-card">
+              <h3>英文定位</h3>
+              <p>本节讨论 CAV 与 human-driven vehicles 同时存在时，纯 CAV 调度协议为什么不够。</p>
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              真实部署不会一夜之间变成全 CAV 环境。人类驾驶车辆、行人、自行车等参与者无法完全遵守 IM 的精确调度指令，因此系统需要兼容交通灯、车载提示设备或更保守的控制策略。
+            </p>
+            <ul class="summary-list">
+              <li>如果 HV 无法通信，IM 就不能像控制 CAV 一样分配精确通行时间。</li>
+              <li>混合交通可能需要保留信号灯，或者让 HV 通过车载设备接收 pass/stop 指令。</li>
+              <li>行人调度在已有 AIM 文献里关注很少，但实际部署无法忽略。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              CAV 调度算法常假设车辆会严格执行命令，而 HV 的行为具有不确定性。这个不确定性会让冲突检测从确定性资源约束变成带预测误差的安全控制问题。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              你的第一版可以明确假设 full CAV / connected vehicles。然后在 limitations 里说明 hybrid traffic 需要额外的 perception、intent prediction 和 conservative buffers，不是当前 JSSP 调度层单独能解决的。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec9">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 9</p>
+            <h2>Safety and Robustness</h2>
+          </div>
+          <span class="section-tag">部署底线</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/fig06_safety_buffers.png" alt="Fig. 6 safety buffers">
+              <figcaption class="source-caption">Fig. 6: 安全缓冲覆盖定位误差、模型误差和通信往返延迟。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 16-17, Section 9. 关键词：safety buffer, localization errors, network failures, faults。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              文章强调 AIM 不是普通优化问题，因为它直接控制载人的车辆。安全和鲁棒性要求算法不仅在理想仿真中避免碰撞，还要在定位误差、网络延迟、软件硬件故障和车辆不执行命令时保持可控。
+            </p>
+            <ul class="summary-list">
+              <li>安全缓冲是把不确定性转成空间-时间冗余的常见方式。</li>
+              <li>定位误差越大、通信延迟越大、模型越不准，安全缓冲就要越大。</li>
+              <li>很多 AIM 文献更重视吞吐，对安全证明、鲁棒性和 fault model 关注不足。</li>
+            </ul>
+            <div class="annotation danger">
+              <strong>难点批注：</strong>
+              “调度结果无冲突”不等于真实系统安全。只有当车辆能按计划执行、状态估计可信、通信延迟有界、故障有恢复策略时，调度可行性才有物理意义。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              你的安全设计应写成硬约束：priority weights 只能影响谁先过，不能放松 conflict-zone capacity、same-lane order、safety headway、deadlock avoidance。这样 priority-aware 不会被误解成“高优先级车辆可以不安全地抢行”。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec10">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 10</p>
+            <h2>Graceful Degradation and Recovery</h2>
+          </div>
+          <span class="section-tag">应急恢复</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 17-18, Section 10. 关键词：fail-safe, recovery, liveness, deadlock-free。
+            </div>
+            <div class="note-card">
+              <h3>英文定位</h3>
+              <p>本节关注系统异常时如何降级、停止、恢复，而不是正常情况下如何提高吞吐。</p>
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              交叉口系统遇到紧急情况时不能只是“算法失败”。它需要有降级机制，例如暂停新车辆进入、让已在交叉口内的车辆安全离开、恢复调度状态，并保证系统不会进入永久堵死。
+            </p>
+            <ul class="summary-list">
+              <li>graceful degradation 指系统在异常时降低性能但保持安全。</li>
+              <li>recovery 指故障处理后如何重建 intersection state 并继续运行。</li>
+              <li>liveness/deadlock-free 分析确保车辆不会因为调度规则互相等待而永远无法通行。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              deadlock-free 不只是图论漂亮性质。交叉口里如果车辆占住某些冲突区又互相等待，物理空间会被堵死，恢复代价远高于一次延迟。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              JSSP formulation 中的 blocking 和 deadlock constraints 是非常重要的卖点。你可以把“priority-aware but deadlock-free”写成核心约束：高优先级车辆不能制造系统性堵死。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec11">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 11</p>
+            <h2>Security Concerns</h2>
+          </div>
+          <span class="section-tag">攻击面</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 18-19, Section 11. 关键词：spoofing, Sybil attack, congestion attack, malicious vehicles。
+            </div>
+            <div class="note-card">
+              <h3>英文定位</h3>
+              <p>本节把 AIM 看成 cyber-physical system：通信消息、身份、位置、速度和请求都可能被攻击。</p>
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              安全攻击会破坏 AIM 的输入可信度。恶意车辆可以伪造位置、速度、身份、到达时间或通行请求，让 IM 做出低效甚至危险的调度。因此 AIM 需要认证、异常检测和攻击下的鲁棒评估。
+            </p>
+            <ul class="summary-list">
+              <li>如果车辆身份可伪造，攻击者可能制造虚假车流或虚假优先级。</li>
+              <li>如果位置/速度可伪造，冲突检测和通行时间预约都会失真。</li>
+              <li>如果通信可被拥塞攻击，系统可能被迫使用更保守的降级模式。</li>
+            </ul>
+            <div class="annotation danger">
+              <strong>难点批注：</strong>
+              priority-aware scheduling 引入了新的攻击面：如果优先级权重来自车辆上报，恶意车辆可能谎报 emergency 或 high-occupancy status。因此权重不能完全信任 self-report。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              第一阶段可以假设 authenticated vehicle class。论文中应注明 priority weight 来自可信基础设施或已认证车辆属性，而不是车辆自由声明。否则 priority-aware 方法会被安全问题攻击。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec12">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 12</p>
+            <h2>Comparison of Evaluation Methods</h2>
+          </div>
+          <span class="section-tag">实验验证</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <figure class="source-box">
+              <img src="Khayatian_etal_2020_assets/fig07_evaluation_methods.png" alt="Fig. 7 evaluation methods">
+              <figcaption class="source-caption">Fig. 7: 仿真器、缩比模型和 vehicle-in-the-loop 测试。</figcaption>
+            </figure>
+            <figure class="source-box" style="margin-top: 12px;">
+              <img src="Khayatian_etal_2020_assets/table06_evaluation.png" alt="Table 6 evaluation approach categories">
+              <figcaption class="source-caption">Table 6: 文献按评估方式分类。</figcaption>
+            </figure>
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 19-20, Section 12. 关键词：SUMO, VISSIM, Gazebo, scale model, vehicle-in-the-loop。
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              评估方法从自建仿真器、SUMO/VISSIM/Gazebo，到缩比车模型和 vehicle-in-the-loop。文章提醒：仿真容易扩展和复现，但常忽略网络延迟、模型不匹配、计算时间和真实传感误差。
+            </p>
+            <table class="mini-table">
+              <thead>
+                <tr><th>评估方式</th><th>适合用途</th><th>注意事项</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>SUMO / traffic simulation</td><td>大规模交通流、平均延迟、吞吐。</td><td>车辆动力学和通信细节可能较粗。</td></tr>
+                <tr><td>Gazebo / robotics simulation</td><td>传感器、三维环境、车辆控制。</td><td>计算开销较大，不适合大量车辆。</td></tr>
+                <tr><td>Scale model / VIL</td><td>接近真实控制和通信测试。</td><td>成本更高，规模和速度受限。</td></tr>
+              </tbody>
+            </table>
+            <ul class="summary-list">
+              <li>只用仿真能验证效率，但难以证明真实部署可行。</li>
+              <li>论文实验应报告调度计算时间，因为实时性直接影响安全。</li>
+              <li>应加入高密度、突发到达、通信延迟、预测误差和不同车辆优先级混合场景。</li>
+            </ul>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              你的实验可以先用 SUMO 或自建离散事件仿真做调度层评估，指标包括 average delay、weighted delay、class-specific delay、throughput、max wait、deadlock rate 和 runtime。之后再把车辆动力学和通信误差作为鲁棒性扩展。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec13">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 13</p>
+            <h2>Conclusion and Future Works</h2>
+          </div>
+          <span class="section-tag">开放问题</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 20-21, Section 13. 关键词：trade-off, fairness, WCET, robustness, deployment gap。
+            </div>
+            <div class="note-card">
+              <h3>英文定位</h3>
+              <p>结论按前面维度逐项总结未来挑战：接口、调度、通信、车辆模型、多路口、混合交通、安全、恢复、攻击和评估。</p>
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              结论部分的核心判断是：CAV intersection management 研究很多，但离真实部署仍远。主要原因不是调度算法完全没有，而是安全、鲁棒性、可靠性、恢复、通信和评估方法还没有充分解决。
+            </p>
+            <ul class="summary-list">
+              <li>接口方面，需要兼顾网络开销、可扩展性、单点故障和不同交叉口类型。</li>
+              <li>调度方面，需要同时处理公平、等待时间、吞吐和计算开销，尤其是 WCET。</li>
+              <li>车辆模型方面，需要在实时性和精确性之间平衡，并考虑模型误差带来的安全缓冲。</li>
+              <li>安全方面，需要 fault model、robustness evaluation、recovery 和 attack scenario。</li>
+            </ul>
+            <div class="annotation">
+              <strong>难点批注：</strong>
+              WCET 很适合放进你的论文限制条件：如果一个调度器平均很快但最坏情况很慢，车辆就可能来不及收到安全通行指令。实时系统看的是最坏时间，而不只是平均时间。
+            </div>
+            <div class="annotation research">
+              <strong>和 Priority-aware JSSP/AIM 的关系：</strong>
+              这篇结论能支持你的 research gap：已有工作重吞吐和平均延迟，较少系统讨论 priority-aware fairness、weighted delay、实时计算和安全约束的一体化。你的论文可以把这些作为 motivation。
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+
+      <section class="paper-section" id="sec14">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Section 14 and References</p>
+            <h2>Acknowledgement / Reference Tail</h2>
+          </div>
+          <span class="section-tag">引用线索</span>
+        </div>
+        <div class="reading-grid">
+          <div class="source-pane">
+            <div class="anchor-box">
+              <strong>Original anchor:</strong> PDF pp. 21-27, acknowledgement and references. 这里主要用于追踪原始文献，不需要精读。
+            </div>
+            <div class="note-card">
+              <h3>优先追踪的引用</h3>
+              <p>Dresner and Stone AIM、Azimi STIP/Ballroom、Crossroads/Crossroads+、Fayazi MILP、Levin/Rey conflict-point、DCL-AIM、SUMO/VISSIM/Gazebo 评估相关文献。</p>
+            </div>
+          </div>
+          <div class="notes-pane">
+            <p class="cn-title">中文主旨</p>
+            <p>
+              参考文献部分可以作为 related work 的入口。对你的研究最有用的不是逐条读完 133 篇，而是按主题挑：reservation AIM 基础、conflict-zone/graph model、optimization scheduling、RL/decentralized learning、安全鲁棒性和仿真评估。
+            </p>
+            <ul class="summary-list">
+              <li>写 related work 时，可以用这篇 survey 做总述，再用几篇核心方法论文做技术细节支撑。</li>
+              <li>如果要证明 novelty，重点比较“普通 AIM 调度”与“priority-aware constrained JSSP scheduling”。</li>
+              <li>如果要写 limitations，直接沿用这篇 survey 的部署维度：通信、HV、恢复、安全、评估。</li>
+            </ul>
+            <div class="annotation research">
+              <strong>可直接服务论文写作的句子思路：</strong>
+              “Existing AIM surveys identify scheduling, conflict detection, communication, robustness, and evaluation as coupled deployment concerns. This work focuses on the scheduling layer and introduces priority-aware weighted delay under hard safety constraints.”
+            </div>
+          </div>
+        </div>
+        <a class="top-link" href="#top">Back to top</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

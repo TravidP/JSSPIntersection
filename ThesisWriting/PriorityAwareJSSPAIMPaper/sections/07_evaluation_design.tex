@@ -1,0 +1,63 @@
+\section{Evaluation Design}
+
+This draft does not report experimental results. Instead, it specifies the evaluation that should be used once the simulator and scheduling algorithms are implemented.
+
+\subsection{Scenarios}
+
+The first experimental environment should be a single four-way intersection with a fixed conflict-zone partition. Vehicle streams can be generated synthetically before moving to real or simulator-derived trajectory data. The scenario factors should include:
+\begin{itemize}
+    \item traffic density: low, medium, and high arrival rates;
+    \item vehicle mix: cars only; cars and buses; cars, buses, and trucks; and an emergency-vehicle scenario;
+    \item priority setting: equal weights, moderate priority, strong priority, and hard emergency priority;
+    \item prediction quality: perfect information, kinematic prediction, and noisy prediction.
+\end{itemize}
+
+\subsection{Metrics}
+
+\begin{table}[t]
+\centering
+\caption{Planned Evaluation Metrics}
+\label{tab:metrics}
+\begin{tabular}{ll}
+\toprule
+Metric & Purpose \\
+\midrule
+Average delay & Overall efficiency \\
+Weighted delay & Main priority-aware objective \\
+Class-specific delay & Bus, truck, emergency service quality \\
+Maximum delay & Starvation and fairness risk \\
+Throughput & Vehicles served per unit time \\
+Queue length & Congestion indicator \\
+Stops/braking events & Comfort and energy proxy \\
+Runtime per horizon & Real-time feasibility \\
+Collision count & Must remain zero \\
+Deadlock count & Must remain zero \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Class-specific reporting is essential. A method that lowers weighted delay by heavily delaying ordinary cars may be unacceptable unless the fairness threshold is satisfied. Similarly, a method that lowers average delay but ignores emergency vehicles should not be considered successful in priority-aware scenarios.
+
+\subsection{Hypotheses}
+
+The following hypotheses should be tested rather than assumed:
+\begin{enumerate}
+    \item Priority-aware scheduling reduces weighted delay and bus/emergency delay compared with equal-priority scheduling.
+    \item Under low traffic density, FCFS or greedy policies may perform close to learning-based scheduling.
+    \item Under high traffic density and mixed vehicle classes, PPO/GNN or hybrid scheduling may outperform FCFS and simple greedy methods.
+    \item Fairness penalties reduce maximum delay for ordinary vehicles with an acceptable tradeoff in high-priority service.
+    \item Receding-horizon scheduling with safety margins remains feasible under controlled prediction error.
+\end{enumerate}
+
+\subsection{Acceptance Criteria for the First Implementation}
+
+The first implementation should be considered successful if it can:
+\begin{itemize}
+    \item generate feasible schedules with zero conflict-zone collisions and zero deadlocks in all tested scenarios;
+    \item compute average delay, weighted delay, class-specific delay, fairness, throughput, and runtime;
+    \item compare FCFS, greedy, and priority-greedy baselines before RL is added;
+    \item validate small horizons against an exact optimization benchmark or clearly document why the benchmark is not yet available.
+\end{itemize}
+
+\placeholder{Insert experiment tables and plots after implementation. Do not add performance claims until the simulator and metrics are complete.}
+

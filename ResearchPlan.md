@@ -251,3 +251,20 @@ The planned contribution is not simply applying PPO to traffic. The goal is to f
 - Yuanyuan Wu, Haipeng Chen, and Feng Zhu. "DCL-AIM: Decentralized Coordination Learning of Autonomous Intersection Management for Connected and Automated Vehicles." Transportation Research Part C, 103:246-260, 2019. DOI: 10.1016/j.trc.2019.04.012
 - Cong Zhang, Wen Song, Zhiguang Cao, Jie Zhang, Puay Siew Tan, and Chi Xu. "Learning to Dispatch for Job Shop Scheduling via Deep Reinforcement Learning." NeurIPS 2020. https://proceedings.neurips.cc/paper/2020/hash/11958dfee29b6709f48a9ba0387a2431-Abstract.html
 - Mohammad Khayatian, Mohammadreza Mehrabian, Edward Andert, Rachel Dedinsky, Sarthake Choudhary, Yingyan Lou, and Aviral Shrivastava. "A Survey on Intersection Management of Connected Autonomous Vehicles." ACM Transactions on Cyber-Physical Systems, 4(4), 2020. DOI: 10.1145/3407903
+
+
+Shuwei points: 
+- 2026/06/04: it should be decentralized, it can find leader or group together easily.
+- 2026/06/04: the problem is that the current approach is centralized, but the real world is decentralized.
+            cut the space into square meters. checks if it conflicts with other time-space reservations (for other vehicles).
+            conflict zone occupation time (CZOT).
+            platoon bsaed with a leader
+
+            queried based and assignment based by centralized manager.
+            IM collects information of all CAVs that are within the range of the intersection and assigns a trajectory to each vehicle. The scheduling process is repeated when a new vehicle enters the control zone, an existing vehicle departs the intersection or it comes to a stop. Crossroads [8] and Crossroads+ [67] are similar AB-IM approaches where vehicles first synchronize their internal clock with the IM and then, let the IM know of their presence by sending their position, velocity, and exit lane along with a timestamp that corresponds to the captured status.
+
+            In QB-IM, the IM either accepts or rejects a request, while in AB-IM, IM explicitly assigns a reservation to the CAV. As a result, AB-IM algorithms can achieve higher throughputs compared to QB-IM ones but the processing time of the intersection manager for an AB-IM algorithm is more than a QB-IM. #time consuming#
+
+Conflict detection: Grid occupation and trajectory prediction.
+Schedule： fcfs, optimization, heuristic 
+

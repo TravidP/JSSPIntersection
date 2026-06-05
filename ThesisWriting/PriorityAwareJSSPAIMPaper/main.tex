@@ -1,0 +1,51 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\placeholder}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\vehicles}{\mathcal{X}}
+\newcommand{\zones}{\mathcal{Z}}
+\newcommand{\trajectories}{\mathcal{T}}
+
+\title{Priority-Aware Constrained Job-Shop Scheduling for Autonomous Intersection Management}
+
+\author{
+\IEEEauthorblockN{[Author Name]}
+\IEEEauthorblockA{[Institution]\\
+Email: [email address]}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Autonomous intersection management (AIM) can replace fixed signal phases with a scheduling mechanism that coordinates connected and automated vehicles through shared conflict areas. A recent line of work models an intersection as a graph of conflict zones and transforms the resulting scheduling problem into a constrained job-shop scheduling problem (JSSP), enabling reinforcement-learning-based dispatching policies. This paper develops a priority-aware extension of that formulation for heterogeneous vehicles. Each vehicle is represented as a job with a release time, a predicted trajectory through conflict zones, class-dependent traversal properties, and a priority weight. The objective is to minimize weighted delay while preserving safety constraints, same-lane order, blocking feasibility, and deadlock avoidance. The proposed framework is designed for online receding-horizon operation, where arrival times and conflict-zone occupation times are predicted from vehicle states and the schedule is repeatedly updated as new vehicles enter the control region. The paper presents the mathematical formulation, a safety-aware learning and heuristic scheduling framework, and an evaluation design for comparing first-come-first-served, greedy, priority-greedy, optimization-based, and reinforcement-learning policies. This draft intentionally reports no experimental performance claims; it defines the formulation and validation plan for future implementation.
+\end{abstract}
+
+\begin{IEEEkeywords}
+autonomous intersection management, connected and automated vehicles, job-shop scheduling, priority-aware scheduling, reinforcement learning, receding horizon control
+\end{IEEEkeywords}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_system_model}
+\input{sections/04_formulation}
+\input{sections/05_receding_horizon}
+\input{sections/06_scheduling_algorithms}
+\input{sections/07_evaluation_design}
+\input{sections/08_conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
+

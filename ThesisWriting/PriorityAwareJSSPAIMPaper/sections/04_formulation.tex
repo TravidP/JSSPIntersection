@@ -1,0 +1,79 @@
+\section{Priority-Aware Constrained JSSP Formulation}
+
+\subsection{Decision Variables}
+
+For every operation $o_{i,k}$, the scheduler determines a start time $s_{i,k}$ and completion time
+\begin{equation}
+    c_{i,k} = s_{i,k} + p_{i,k}.
+\end{equation}
+The exit time of vehicle $i$ is
+\begin{equation}
+    C_i = c_{i,n_i}.
+\end{equation}
+For two operations that require the same conflict zone, a binary ordering decision can be introduced to choose which operation is processed first. In a learning or greedy dispatching environment, this ordering can instead be induced incrementally by feasible action selection.
+
+\subsection{Release-Time and Trajectory Constraints}
+
+A vehicle cannot enter its first scheduled conflict zone before it physically arrives:
+\begin{equation}
+    s_{i,1} \ge r_i, \quad \forall i \in \vehicles.
+\end{equation}
+The vehicle must traverse conflict zones in its route order:
+\begin{equation}
+    s_{i,k+1} \ge c_{i,k}, \quad \forall i \in \vehicles,\; k=1,\ldots,n_i-1.
+\end{equation}
+
+\subsection{Conflict-Zone Capacity and Headway}
+
+If operation $o_{i,k}$ and operation $o_{j,l}$ require the same conflict zone, then their occupation intervals cannot overlap. With safety headway $h_{ij}$, one of the following disjunctive constraints must hold:
+\begin{align}
+    s_{j,l} &\ge c_{i,k} + h_{ij}, \\
+    \text{or}\quad s_{i,k} &\ge c_{j,l} + h_{ji}.
+\end{align}
+This is the scheduling decision that resolves a shared-resource conflict. The headway may depend on vehicle classes, vehicle lengths, and uncertainty margins.
+
+\subsection{Same-Lane FIFO Constraint}
+
+If vehicles $i$ and $j$ enter from the same lane and $i$ is physically ahead of $j$, then $j$ should not overtake $i$ inside the control zone. A simple FIFO constraint is
+\begin{equation}
+    C_i \le C_j
+\end{equation}
+or, more locally, precedence edges can be added between corresponding same-lane operations. The local representation is preferable when the vehicles share only part of a trajectory and when the graph-based formulation is used.
+
+\subsection{Blocking and Deadlock Constraints}
+
+Classical JSSP assumes that a job leaves a machine immediately after processing and can wait outside machines between operations. In an intersection, a vehicle is physical: if it cannot move into the next conflict zone, it may continue blocking its current zone or storage area. Therefore, the scheduler must avoid schedules that allow a vehicle to disappear between zones. A practical first implementation can enforce this by checking that the next zone becomes available before the current-zone release is committed, or by using conservative buffer zones.
+
+Deadlock can occur when several vehicles each wait for a zone held by another vehicle. In graph-based AIM, deadlock can be detected as a cycle in the directed timing-constraint graph \cite{lin2019graph}. In a dispatching environment, an action should be considered infeasible if it creates a cycle or otherwise violates the deadlock-freeness test.
+
+\subsection{Priority-Aware Objective}
+
+Let the free-flow traversal time of vehicle $i$ be
+\begin{equation}
+    P_i = \sum_{k=1}^{n_i} p_{i,k}.
+\end{equation}
+The scheduling delay is
+\begin{equation}
+    D_i = C_i - r_i - P_i.
+\end{equation}
+The proposed primary objective is weighted total delay:
+\begin{equation}
+    \min \sum_{i\in\vehicles} w_i D_i.
+    \label{eq:weighted-delay}
+\end{equation}
+To discourage starvation of low-priority vehicles, a fairness term can be added:
+\begin{equation}
+    \min \sum_{i\in\vehicles} w_i D_i
+    + \lambda \sum_{i\in\vehicles}\max(0,D_i-D_{\max}).
+    \label{eq:fairness-objective}
+\end{equation}
+Here $D_{\max}$ is a maximum tolerated delay threshold and $\lambda$ controls the penalty strength. Eq.~\eqref{eq:fairness-objective} is a proposed first formulation; other fairness terms, such as max-delay or delay-variance penalties, can be evaluated later.
+
+\subsection{Emergency Priority}
+
+Emergency vehicles may require hard priority rather than only a larger weight. For a conflicting ordinary vehicle $j$ and an emergency vehicle $e$, a hard-priority rule can enforce
+\begin{equation}
+    C_e \le C_j
+\end{equation}
+when this does not violate safety or deadlock constraints. If such a hard rule creates infeasibility, the system should fall back to the earliest safe schedule for the emergency vehicle rather than relaxing collision constraints.
+

@@ -1,0 +1,49 @@
+\section{Online Receding-Horizon Framework}
+
+Traffic arrives continuously, so the controller should not solve one static scheduling problem for an unknown future stream. Instead, the proposed framework uses receding-horizon scheduling. At decision time $t$, the intersection manager observes vehicles within a control range and predicts which vehicles will reach relevant conflict zones within horizon $H$. It then constructs a finite constrained-JSSP instance for that horizon, schedules feasible operations, executes only the near-term part of the schedule, and repeats the process when new data arrive.
+
+\begin{figure}[t]
+\centering
+\fbox{\begin{minipage}{0.94\linewidth}
+\small
+\textbf{Receding-horizon cycle}
+\begin{enumerate}
+    \item Observe vehicle states, classes, lanes, and intended movements.
+    \item Predict release times $r_i$, trajectories $T_i$, and processing times $p_{i,k}$.
+    \item Build a finite priority-aware constrained-JSSP instance.
+    \item Solve or approximate the schedule using a selected scheduler.
+    \item Send near-term crossing order or time-window commands.
+    \item Update predictions and re-plan at the next decision cycle.
+\end{enumerate}
+\end{minipage}}
+\caption{Online scheduling cycle. This boxed summary is a draft placeholder for a future vector diagram.}
+\label{fig:cycle}
+\end{figure}
+
+\subsection{Horizon Construction and Grouping}
+
+Huang et al. use arrival-time grouping to apply a trained PPO scheduler to streams of vehicles without training only on very large static groups \cite{huang2023reinforcement}. In the proposed framework, this idea is interpreted as one possible horizon-construction rule. A group may be formed by vehicles whose predicted release times fall in the next horizon $[t,t+H]$, by natural clusters in arrival times, or by a maximum active-vehicle count. The first implementation should use a simple fixed horizon and maximum group size, then compare it with arrival-time clustering after the simulator is stable.
+
+Grouping must be combined with a commitment rule. Decisions whose start times fall within a short commitment window should remain fixed unless a safety violation is predicted. Vehicles and operations outside that window can be re-optimized at the next cycle. This prevents the controller from repeatedly changing near-term commands while still allowing later decisions to adapt to new arrivals and prediction updates.
+
+\subsection{Prediction Inputs}
+
+The prediction module estimates the scheduling parameters from vehicle states. A first implementation can use a simple kinematic model:
+\begin{equation}
+    \hat{r}_i = t + \frac{d_i}{\max(v_i,\epsilon)},
+\end{equation}
+where $d_i$ is distance to the first conflict zone, $v_i$ is current speed, and $\epsilon$ prevents division by zero. Processing times can be estimated from path length, desired speed, vehicle class, and safety margins. Later versions can replace this baseline with learned trajectory prediction or uncertainty-aware prediction.
+
+\subsection{Schedule Stability}
+
+Because the horizon is updated repeatedly, the scheduler should avoid changing already-communicated near-term decisions unless safety requires it. A stability penalty can be added to the objective:
+\begin{equation}
+    \eta U,
+\end{equation}
+where $U$ penalizes changes from the previously committed schedule. In the first implementation, a simpler rule is recommended: keep all operations whose start times are within a short commitment window fixed, and re-plan only the remaining operations.
+
+\subsection{Safety Under Prediction Error}
+
+Prediction error should not be handled by trusting the learned policy. Instead, the system should add safety margins to release times, processing times, and headways, then re-plan frequently. Robustness can be tested by injecting noise into $\hat{r}_i$ and $p_{i,k}$ and measuring whether the generated schedule remains feasible after online correction.
+
+\placeholder{Choose horizon length $H$, update period, and commitment-window duration for the first simulator.}
